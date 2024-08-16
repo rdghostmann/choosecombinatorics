@@ -1,5 +1,4 @@
-Project Name
-A brief description of your project, its purpose, and functionality.
+The "Combinatorics" project is a tool designed to perform combinatorial calculations, specifically "choose k" operations, where combinations are generated from a set of given numbers. The project focuses on calculating combinations and applying modular arithmetic to the results, making it a useful tool for mathematical analysis and data processing. The application can handle various combination sizes, such as "choose 2," "choose 3," and beyond, allowing for flexible analysis of different input sizes. Additionally, the project includes features like displaying results in a tabular format and integrating the outputs into a Pascal's triangle structure, enhancing the visualization and interpretation of the combinatorial results
 
 Table of Contents
 Installation
@@ -43,7 +42,6 @@ E.g., "Highlight specific numbers in a grid based on conditions."
 Technology Stack
 Frontend: Next.js, Tailwind CSS
 Backend: Node.js, Express (if applicable)
-Database: MongoDB (if applicable)
 Authentication: NextAuth (if applicable)
 Contributing
 Guidelines for contributing to the project.
