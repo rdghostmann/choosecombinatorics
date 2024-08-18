@@ -11,6 +11,16 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
+    "/choosetwo/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/choosetwo/layout.js"
+    ],
+    "/choosetwo/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/choosetwo/page.js"
+    ],
     "/choosetwo/negativechoose/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -20,11 +30,6 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/choosetwo/multiplychoose/page.js"
-    ],
-    "/choosetwo/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/choosetwo/page.js"
     ]
   }
 }
