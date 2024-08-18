@@ -1,129 +1,48 @@
-//Combinatorics Component
+// Combinatorics Component
 "use client";
 import React, { useRef, useState } from 'react';
 
 const Combinatorics = () => {
   const tbl = useRef(null);
-
-  // const [inputValues, setInputValues] = useState(Array(45).fill(''));
   const [inputValues, setInputValues] = useState(Array.from({ length: 90 }, (_, i) => i + 1));
   const [analyticsData, setAnalyticsData] = useState([]);
   const [modResults, setModResults] = useState([]);
   const [userNumbers, setUserNumbers] = useState(Array(5).fill('')); // State for user input numbers
+  const [chooseN, setChooseN] = useState(2); // State for "choose n"
 
-
-
-
-
-  // Function to calculate the "choose 2" sums and return modulus 90
-  const calculateChoose2 = () => {
-    const numbers = userNumbers.map(num => parseInt(num)).filter(num => !isNaN(num)); // Convert input to numbers
+  // Function to calculate the "choose n" sums and return modulus 90
+  const calculateChooseN = (n) => {
+    const numbers = userNumbers.map(num => parseInt(num)).filter(num => !isNaN(num));
     let results = [];
 
-    for (let i = 0; i < numbers.length; i++) {
-      for (let j = i + 1; j < numbers.length; j++) {
-        const sum = numbers[i] + numbers[j];
-        const mod90 = sum % 90;
-        results.push(mod90);
+    const combinations = (arr, n, start = 0, currentCombo = []) => {
+      if (currentCombo.length === n) {
+        const sum = currentCombo.reduce((acc, val) => acc + val, 0);
+        results.push(sum % 90);
+        return;
       }
-    }
+      for (let i = start; i < arr.length; i++) {
+        combinations(arr, n, i + 1, [...currentCombo, arr[i]]);
+      }
+    };
 
+    combinations(numbers, n);
     return results;
   };
 
-  // Function to calculate the "choose 3" sums and return modulus 90
-  const calculateChoose3 = () => {
-    const numbers = userNumbers.map(num => parseInt(num)).filter(num => !isNaN(num)); // Convert input to numbers
-    let results = [];
-
-    for (let i = 0; i < numbers.length; i++) {
-      for (let j = i + 1; j < numbers.length; j++) {
-        for (let k = j + 1; k < numbers.length; k++) {
-          const sum = numbers[i] + numbers[j] + numbers[k];
-          const mod90 = sum % 90;
-          results.push(mod90);
-        }
-      }
+  // Handle calculation and store the mod results
+  const handleCalculate = () => {
+    if (chooseN < 2 || chooseN > 44) {
+      alert("Choose n must be between 2 and 44");
+      return;
     }
-
-    return results;
-  };
-
-  // Function to calculate the "choose 4" sums and return modulus 90
-  const calculateChoose4 = () => {
-    const numbers = userNumbers.map(num => parseInt(num)).filter(num => !isNaN(num)); // Convert input to numbers
-    let results = [];
-
-    for (let i = 0; i < numbers.length; i++) {
-      for (let j = i + 1; j < numbers.length; j++) {
-        for (let k = j + 1; k < numbers.length; k++) {
-          for (let l = k + 1; l < numbers.length; l++) {
-            const sum = numbers[i] + numbers[j] + numbers[k] + numbers[l];
-            const mod90 = sum % 90;
-            results.push(mod90);
-          }
-        }
-      }
-    }
-
-    return results;
-  };
-
-  // Function to calculate the "choose 5" sums and return modulus 90
-  const calculateChoose5 = () => {
-    const numbers = userNumbers.map(num => parseInt(num)).filter(num => !isNaN(num)); // Convert input to numbers
-    let results = [];
-
-    for (let i = 0; i < numbers.length; i++) {
-      for (let j = i + 1; j < numbers.length; j++) {
-        for (let k = j + 1; k < numbers.length; k++) {
-          for (let l = k + 1; l < numbers.length; l++) {
-            for (let m = l + 1; m < numbers.length; m++) {
-              const sum = numbers[i] + numbers[j] + numbers[k] + numbers[l] + numbers[m];
-              const mod90 = sum % 90;
-              results.push(mod90);
-            }
-          }
-        }
-      }
-    }
-
-    return results;
-  };
-
-
-
-  // Handle Calculate and store the mod results
-  const handleCalculate2 = () => {
-    const results = calculateChoose2();
+    const results = calculateChooseN(chooseN);
     setModResults(results);
     setTimeout(() => {
       handleResultCheck();
     }, 2000);
+    confirm(`Choose ${chooseN} generated`);
   };
-  const handleCalculate3 = () => {
-    const results = calculateChoose3();
-    setModResults(results);
-    setTimeout(() => {
-      handleResultCheck();
-    }, 2000);
-  };
-  const handleCalculate4 = () => {
-    const results = calculateChoose4();
-    setModResults(results);
-    setTimeout(() => {
-      handleResultCheck();
-    }, 2000);
-  };
-  const handleCalculate5 = () => {
-    const results = calculateChoose5();
-    setModResults(results);
-    setTimeout(() => {
-      handleResultCheck();
-    }, 2000);
-  };
-
-
 
 
   // Handle ResultChecker
@@ -153,35 +72,12 @@ const Combinatorics = () => {
     setAnalyticsData(Object.entries(analytics));
   };
 
-
   return (
     <>
       <section className="hidden md:block text-xs">
-        <div className="overflow-x-scroll m-6 ">
-          <div className="bg-slate-300 p-3 ">
-            <button onClick={handleCalculate2} className="bg-slate-600 text-white rounded px-2 py-1 m-2">
-              Generate Choose 2 Sequence
-            </button>
-            <button onClick={handleCalculate3} className="bg-slate-700 text-white rounded px-2 py-1 m-2">
-              Generate Choose 3 Sequence
-            </button>
-            <button onClick={handleCalculate4} className="bg-slate-800 text-white rounded px-2 py-1 m-2">
-              Generate Choose 4 Sequence
-            </button>
-            <button onClick={handleCalculate5} className="bg-slate-900 text-white rounded px-2 py-1 m-2">
-              Generate Choose 5 Sequence
-            </button>
-
-
-
-
-
-
-          </div>
-
+        <div className="overflow-x-scroll m-6">
           <div className="flex flex-row space-x-1 sm:flex">
-
-            <div className=" border w-1/4 mx-auto p-2 flex flex-col result-checker">
+            <div className="border w-1/4 mx-auto p-2 flex flex-col result-checker">
               <h2 className="animate-bounce w- p-2 m-2 text-sm text-center font-bold ">
                 Number Pool 🎱🎱
               </h2>
@@ -189,12 +85,9 @@ const Combinatorics = () => {
               <p className="w-4/5 mx-auto p-2 m-2 font-light text-center">
                 Fill 90 inputs to highlight matching numbers in the table.
               </p>
-
-              {/* <button disabled onClick={handleResultCheck}  className="mx-auto bg-slate-700 text-white rounded px-2 py-1 m-2">
-                Result Checker
-              </button> */}
-              <p className="text-center mx-auto bg-slate-700 text-white rounded px-2 py-1 m-2">Result Checker runs 3secs for combinatorics values</p>
-
+              <p className="text-center mx-auto bg-slate-700 text-white rounded px-2 py-1 m-2">
+                Result Checker runs 3secs for combinatorics values
+              </p>
               <div className="flex space-between">
                 <div className="w-[55%] pool-numbers m-0 rounded">
                   <div className="check-inputs mx-auto bg-white p-2 flex justify-evenly flex-wrap gap-3 rounded-lg">
@@ -215,12 +108,11 @@ const Combinatorics = () => {
                     ))}
                   </div>
                 </div>
-
                 <div className="flex flex-col items-stretch w-[45%] p-1" id="analytics">
                   <p className="w-full bg-slate-200 p-1 mb-1 text-center text-[10px] sm:text-xs">
                     Analytics Pairs
                   </p>
-                  <div className="w-full h-full mx-auto text-center border border-white bg-transparent shadow-lg" id="analytics-content"  >
+                  <div className="w-full h-full mx-auto text-center border border-white bg-transparent shadow-lg" id="analytics-content">
                     <ul className="mx-auto ">
                       {analyticsData.map(([key, value]) => (
                         <li key={key} className="w-full border-b border-white last:border-none py-2">
@@ -231,13 +123,27 @@ const Combinatorics = () => {
                   </div>
                 </div>
               </div>
+
             </div>
-
-
-            <table
-              ref={tbl}
-              className="w-9/12 border border-black border-collapse text-center text-sm"
-            >
+            <div className="w-9/12 h-fit">
+            <div className="max-w-fit my-5 flex flex-col items-center">
+              <label htmlFor="choose-n" className="text-sm font-light">
+                Choose N:
+              </label>
+              <input
+                id="choose-n"
+                type="number"
+                min="2"
+                max="7"
+                value={chooseN}
+                onChange={(e) => setChooseN(parseInt(e.target.value))}
+                className="p-1 mb-2 border rounded"
+              />
+              <button onClick={handleCalculate} className="mx-auto bg-slate-700 text-white rounded px-2 py-1">
+                Calculate Choose {chooseN}
+              </button>
+            </div>
+            <table ref={tbl} className="w-full h-fit border border-black border-collapse text-center text-sm">
               <thead>
                 {Array.from({ length: 3 }).map((_, rowIndex) => (
                   <tr key={rowIndex} className="bg-gray-200">
@@ -263,25 +169,20 @@ const Combinatorics = () => {
                     })}
                   </tr>
                 ))}
-
               </thead>
-
-
-
               <tbody>
                 {Array.from({ length: Math.ceil(modResults.length / 15) }).map((_, rowIndex) => (
                   <tr key={rowIndex} className="border border-black border-collapse">
                     {modResults.slice(rowIndex * 15, (rowIndex + 1) * 15).map((result, colIndex) => (
-                      <td key={colIndex} className="border border-black text-xs border-collapse">
+                      <td key={colIndex} className="border border-black text-xs border-collapse bg-green-400 text-white">
                         {result}
                       </td>
                     ))}
                   </tr>
                 ))}
-
               </tbody>
             </table>
-
+            </div>
           </div>
         </div>
       </section>
