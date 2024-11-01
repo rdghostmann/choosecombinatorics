@@ -1,17 +1,18 @@
 // Paired Component
-// This component displays inputs of 15columns and 3rows. Refactor only the Handle ResultChecker arrow functionality to check the table ref={tbl} for pair numbers that appear next to each other more than one time and then outputs them in the analyticsData Analytics Pairs and how many times this numbers that appear next to each other in the table ref={tbl}. Else there are no such pairing with your number combinatorics
-
 
 "use client";
 import React, { useRef, useState } from 'react';
 
 const PairedCombinatorics = () => {
   const tbl = useRef(null);
-  const [inputValues, setInputValues] = useState(Array.from({ length: 90 }, (_, i) => i + 1));
   const [analyticsData, setAnalyticsData] = useState([]);
   const [modResults, setModResults] = useState([]);
   const [userNumbers, setUserNumbers] = useState(Array(5).fill('')); // State for user input numbers
   const [chooseN, setChooseN] = useState(2); // State for "choose n"
+
+
+
+  
 
   // Function to calculate the "choose n" sums and return modulus 90
   const calculateChooseN = (n) => {
@@ -47,42 +48,74 @@ const PairedCombinatorics = () => {
     confirm(`Choose ${chooseN} generated`);
   };
 
-
- // Handle ResultChecker for Adjacent Paired Numbers
-const handleResultCheck = () => {
-  const tableCells = tbl?.current.querySelectorAll('td');
-  const analytics = {};
+  const handleResultCheck = () => {
+    const tableCells = tbl?.current.querySelectorAll('td');
+    const analytics = {};
   
-  // Traverse each row to find adjacent pairs
-  for (let i = 0; i < tableCells.length; i++) {
-    const currentCell = tableCells[i];
-    const nextCell = tableCells[i + 1];
-
-    // Check if the next cell exists and values are equal
-    if (nextCell && parseInt(currentCell.innerText) === parseInt(nextCell.innerText)) {
-      const pairValue = currentCell.innerText;
-      
-      // Track pairs and their occurrences
-      if (analytics[pairValue]) {
-        analytics[pairValue]++;
-      } else {
-        analytics[pairValue] = 1;
-      }
-
-      // Highlight paired cells
-      currentCell.classList.add('bg-green-400', 'text-white');
-      nextCell.classList.add('bg-green-400', 'text-white');
+    // Specify the pattern to look for
+    const targetPairs = [
+      ["0", "1"], ["1", "0"],
+      ["0", "2"], ["2", "0"],
+      ["0", "3"], ["3", "0"],
+      ["0", "4"], ["4", "0"],
+      ["0", "5"], ["5", "0"],
+      ["0", "6"], ["6", "0"],
+      ["0", "7"], ["7", "0"],
+      ["0", "8"], ["8", "0"],
+      ["0", "9"], ["9", "0"],
+      ["0", "10"], ["10", "0"],
+      ["0", "11"], ["11", "0"],
+      ["0", "12"], ["12", "0"],
+      ["0", "13"], ["13", "0"],
+      ["0", "14"], ["14", "0"],
+      ["0", "15"], ["15", "0"],
+      ["0", "16"], ["16", "0"],
+      ["0", "17"], ["17", "0"],
+      ["0", "18"], ["18", "0"],
+      // ... continues up to ["90", "89"], ["89", "90"]
+    ];
+    
+  
+    // Clear previous highlights
+    tableCells.forEach(cell => cell.classList.remove('bg-purple-500', 'text-white'));
+  
+    // Traverse each row to find specific adjacent pairs
+    for (let i = 0; i < tableCells.length - 1; i++) {
+      const currentCell = tableCells[i];
+      const nextCell = tableCells[i + 1];
+  
+      const currentNum = currentCell.innerText.trim();
+      const nextNum = nextCell.innerText.trim();
+  
+      // Check if the current pair matches any of the target patterns
+      targetPairs.forEach(([first, second]) => {
+        if (currentNum === first && nextNum === second) {
+          const pairKey = `${first} ${second}`;
+  
+          // Track pairs and their occurrences
+          if (analytics[pairKey]) {
+            analytics[pairKey]++;
+          } else {
+            analytics[pairKey] = 1;
+          }
+  
+          // Highlight the cells with the matching pair
+          currentCell.classList.add('bg-purple-500', 'text-white');
+          nextCell.classList.add('bg-purple-500', 'text-white');
+        }
+      });
     }
-  }
+  
+    // Update analyticsData with pairs and counts
+    setAnalyticsData(Object.entries(analytics).map(([key, value]) => [key, value]));
+  
+    // If no pairs were found, reset analytics data
+    if (Object.keys(analytics).length === 0) {
+      setAnalyticsData([["No pairs found"]]);
+    }
+  };
+  
 
-  // Update analyticsData with pairs and counts
-  setAnalyticsData(Object.entries(analytics).map(([key, value]) => [key, value]));
-
-  // If no pairs were found, reset analytics data
-  if (Object.keys(analytics).length === 0) {
-    setAnalyticsData([["No pairs found"]]);
-  }
-};
 
 
   return (
@@ -101,106 +134,72 @@ const handleResultCheck = () => {
               <p className="text-center mx-auto bg-slate-700 text-white rounded px-2 py-1 m-2">
                 Result Checker runs 3secs for combinatorics values
               </p>
-              {/* <div className="flex space-between">
-                <div className="w-[55%] pool-numbers m-0 rounded">
-                  <div className="check-inputs mx-auto bg-white p-2 flex justify-evenly flex-wrap gap-3 rounded-lg">
-                    {Array.from({ length: 90 }).map((_, index) => (
-                      <input
-                        key={index}
-                        className="rounded-full text-xs"
-                        type="number"
-                        value={inputValues[index]}
-                        onChange={(e) =>
-                          setInputValues((prevState) => {
-                            const newState = [...prevState];
-                            newState[index] = e.target.value;
-                            return newState;
-                          })
-                        }
-                      />
-                    ))}
-                  </div>
-                </div>
-                <div className="flex flex-col items-stretch w-[45%] p-1" id="analytics">
-                  <p className="w-full bg-slate-200 p-1 mb-1 text-center text-[10px] sm:text-xs">
-                    Analytics Pairs
-                  </p>
-                  <div className="w-full h-full mx-auto text-center border border-white bg-transparent shadow-lg" id="analytics-content">
-                    <ul className="mx-auto ">
-                      {analyticsData.map(([key, value]) => (
-                        <li key={key} className="w-full border-b border-white last:border-none py-2">
-                          <b className="">{key}</b> {' - '}{' '}<span className="italic">{value} pairs</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div> */}
+
 
             </div>
-            <div className="max-w-full w-9/12 h-fit">
-            <div className="max-w-fit my-5 flex flex-col items-center">
-              <label htmlFor="choose-n" className="text-sm font-light">
-                Choose N:
-              </label>
-              <input
-                id="choose-n"
-                type="number"
-                min="2"
-                max="7"
-                value={chooseN}
-                onChange={(e) => setChooseN(parseInt(e.target.value))}
-                className="p-1 mb-2 border rounded"
-              />
-              <button onClick={handleCalculate} className="mx-auto bg-slate-700 text-white rounded px-2 py-1">
-                Calculate Choose {chooseN}
-              </button>
-            </div>
-            <table ref={tbl} className="w-full h-fit border border-black border-collapse text-center text-sm">
-              <thead>
-                {Array.from({ length: 3 }).map((_, rowIndex) => (
-                  <tr key={rowIndex} className="bg-gray-200">
-                    {Array.from({ length: 15 }).map((_, colIndex) => {
-                      const index = rowIndex * 15 + colIndex;
-                      return (
-                        <td key={index} className="border pb-3 border-black text-xs border-collapse">
-                          <div className="text-xs text-center mb-1">col{index + 1}</div>
-                          <input
-                            className="w-full mx-auto text-xs p-2 m-1 border rounded"
-                            type="number"
-                            min={1}
-                            max={90}
-                            value={userNumbers[index] || ''}
-                            onChange={(e) => {
-                              const newNumbers = [...userNumbers];
-                              newNumbers[index] = e.target.value;
-                              setUserNumbers(newNumbers);
-                            }}
-                          />
+            <div className="w-9/12 h-fit">
+              <div className="max-w-fit my-5 flex flex-col items-center">
+                <label htmlFor="choose-n" className="text-sm font-light">
+                  Choose N:
+                </label>
+                <input
+                  id="choose-n"
+                  type="number"
+                  min="2"
+                  max="7"
+                  value={chooseN}
+                  onChange={(e) => setChooseN(parseInt(e.target.value))}
+                  className="p-1 mb-2 border rounded"
+                />
+                <button onClick={handleCalculate} className="mx-auto bg-slate-700 text-white rounded px-2 py-1">
+                  Calculate Choose {chooseN}
+                </button>
+              </div>
+              <table ref={tbl} className="w-full h-fit border border-black border-collapse text-center text-sm">
+                <thead>
+                  {Array.from({ length: 3 }).map((_, rowIndex) => (
+                    <tr key={rowIndex} className="bg-gray-200">
+                      {Array.from({ length: 15 }).map((_, colIndex) => {
+                        const index = rowIndex * 15 + colIndex;
+                        return (
+                          <td key={index} className="border pb-3 border-black text-xs border-collapse">
+                            <div className="text-xs text-center mb-1">col{index + 1}</div>
+                            <input
+                              className="w-full mx-auto text-xs p-2 m-1 border rounded"
+                              type="number"
+                              min={1}
+                              max={90}
+                              value={userNumbers[index] || ''}
+                              onChange={(e) => {
+                                const newNumbers = [...userNumbers];
+                                newNumbers[index] = e.target.value;
+                                setUserNumbers(newNumbers);
+                              }}
+                            />
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  ))}
+                </thead>
+                <tbody>
+                  {Array.from({ length: Math.ceil(modResults.length / 15) }).map((_, rowIndex) => (
+                    <tr key={rowIndex} className="border border-black border-collapse">
+                      {modResults.slice(rowIndex * 15, (rowIndex + 1) * 15).map((result, colIndex) => (
+                        <td key={colIndex} className="border border-black text-xs border-collapse">
+                          {result}
                         </td>
-                      );
-                    })}
-                  </tr>
-                ))}
-              </thead>
-              <tbody>
-                {Array.from({ length: Math.ceil(modResults.length / 15) }).map((_, rowIndex) => (
-                  <tr key={rowIndex} className="border border-black border-collapse">
-                    {modResults.slice(rowIndex * 15, (rowIndex + 1) * 15).map((result, colIndex) => (
-                      <td key={colIndex} className="border border-black text-xs border-collapse bg-green-400 text-white">
-                        {result}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="block sm:block md:hidden w-full h-screen">
+      <section className="block sm:block md:hidden w-full h-scre  en">
         <div className="animate-bounce mx-auto mt-20 w-3/4">
           <p className="text-center text-xs">This is a Desktop Application</p>
           <p className="text-center text-xs">Please view with a Wider Screen</p>

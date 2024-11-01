@@ -25,16 +25,6 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/choosetwo/pairedchoose/page.js"
-    ],
-    "/choosetwo/multiplychoose/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/choosetwo/multiplychoose/page.js"
-    ],
-    "/choosetwo/negativechoose/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/choosetwo/negativechoose/page.js"
     ]
   }
 }
