@@ -12,7 +12,7 @@ const PairedCombinatorics = () => {
 
 
 
-
+  
 
   // Function to calculate the "choose n" sums and return modulus 90
   const calculateChooseN = (n) => {
@@ -51,7 +51,7 @@ const PairedCombinatorics = () => {
   const handleResultCheck = () => {
     const tableCells = tbl?.current.querySelectorAll('td');
     const analytics = {};
-
+  
     const targetPairs = [
       ["0", "1"], ["1", "0"],
       ["0", "2"], ["2", "0"],
@@ -202,55 +202,55 @@ const PairedCombinatorics = () => {
       ["1", "58"], ["58", "1"],
       ["1", "59"], ["59", "1"],
       ["1", "60"], ["60", "1"],
-      ["88", "80"], ["80", "88"],
+      ["88", "80"], ["80", "88"]
       ["1", "61"], ["61", "1"],
       ["1", "62"], ["62", "1"],
       ["1", "63"], ["63", "1"],
       ["1", "64"], ["64", "1"],
       ["1", "65"], ["65", "1"],
     ]
-
-
-
+    
+    
+  
     // Clear previous highlights
     tableCells.forEach(cell => cell.classList.remove('bg-purple-500', 'text-white'));
-
+  
     // Traverse each row to find specific adjacent pairs
     for (let i = 0; i < tableCells.length - 1; i++) {
       const currentCell = tableCells[i];
       const nextCell = tableCells[i + 1];
-
+  
       const currentNum = currentCell.innerText.trim();
       const nextNum = nextCell.innerText.trim();
-
+  
       // Check if the current pair matches any of the target patterns
       targetPairs.forEach(([first, second]) => {
         if (currentNum === first && nextNum === second) {
           const pairKey = `${first} ${second}`;
-
+  
           // Track pairs and their occurrences
           if (analytics[pairKey]) {
             analytics[pairKey]++;
           } else {
             analytics[pairKey] = 1;
           }
-
+  
           // Highlight the cells with the matching pair
           currentCell.classList.add('bg-purple-500', 'text-white');
           nextCell.classList.add('bg-purple-500', 'text-white');
         }
       });
     }
-
+  
     // Update analyticsData with pairs and counts
     setAnalyticsData(Object.entries(analytics).map(([key, value]) => [key, value]));
-
+  
     // If no pairs were found, reset analytics data
     if (Object.keys(analytics).length === 0) {
       setAnalyticsData([["No pairs found"]]);
     }
   };
-
+  
 
 
 
