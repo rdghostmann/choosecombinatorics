@@ -1,5 +1,6 @@
 {
   "/page": "app/page.js",
   "/choosetwo/page": "app/choosetwo/page.js",
+  "/choosetwo/negativepair/page": "app/choosetwo/negativepair/page.js",
   "/choosetwo/pairedchoose/page": "app/choosetwo/pairedchoose/page.js"
 }
