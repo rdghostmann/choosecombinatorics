@@ -25,6 +25,9 @@ const PageLayout = ({ children }) => {
           <Link className="grid place-items-center m-3 w-fit px-2 py-1 rounded-lg border border-gray-500 focus:border-2 focus:border-gray-800 bg-gray-300" href="/choosetwo/productpair">
            🟦X   <span className="hidden">Combinatorics</span>
           </Link>
+          <Link className="grid place-items-center m-3 w-fit px-2 py-1 rounded-lg border border-gray-500 focus:border-2 focus:border-gray-800 bg-gray-300" href="/permute">
+           💥🌈Perm&Combo  <span className="hidden">Combinatorics</span>
+          </Link>
         </nav>
         <h1 className="flex-1 font-bold text-center text-xl text-white">Unleash the Power of Combinatorics!</h1>
       </header>
