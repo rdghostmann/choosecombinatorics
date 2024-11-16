@@ -1,6 +1,6 @@
 "use client";
 import React, { useRef, useState } from 'react';
-import targetPairs from '@/lib/targetPair';
+import targetPairs from '../../lib/targetPair';
 
 
 const NegativePaired = () => {

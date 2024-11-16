@@ -1,6 +1,6 @@
 "use client";
 
-import NegativePaired from "@/app/components/NegativePaired";
+import NegativePaired from "../../components/NegativePaired";
 
 
 const page = () => {

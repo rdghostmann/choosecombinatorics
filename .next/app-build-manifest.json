@@ -11,20 +11,40 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/permute/page": [
+    "/choosetwo/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/permute/page.js"
+      "static/chunks/app/choosetwo/layout.js"
     ],
     "/choosetwo/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/choosetwo/page.js"
     ],
-    "/choosetwo/layout": [
+    "/permute/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/choosetwo/layout.js"
+      "static/chunks/app/permute/page.js"
+    ],
+    "/choosetwo/pairedchoose/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/choosetwo/pairedchoose/page.js"
+    ],
+    "/choosetwo/negativepair/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/choosetwo/negativepair/page.js"
+    ],
+    "/choosetwo/productpair/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/choosetwo/productpair/page.js"
+    ],
+    "/not-found": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/not-found.js"
     ]
   }
 }

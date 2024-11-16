@@ -1,6 +1,6 @@
 "use client";
 
-import PairedCombinatorics from "@/app/components/PairedCombinatorics";
+import PairedCombinatorics from "../../components/PairedCombinatorics";
 
 
 

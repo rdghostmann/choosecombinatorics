@@ -1,5 +1,8 @@
 {
+  "/not-found": "app/not-found.js",
   "/permute/page": "app/permute/page.js",
-  "/page": "app/page.js",
-  "/choosetwo/page": "app/choosetwo/page.js"
+  "/choosetwo/page": "app/choosetwo/page.js",
+  "/choosetwo/pairedchoose/page": "app/choosetwo/pairedchoose/page.js",
+  "/choosetwo/negativepair/page": "app/choosetwo/negativepair/page.js",
+  "/choosetwo/productpair/page": "app/choosetwo/productpair/page.js"
 }

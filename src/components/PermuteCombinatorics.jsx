@@ -114,6 +114,7 @@ export default function PermuteCombinatorics() {
                           placeholder={`${index + 1}`}
                         />
                       </TableCell>
+
                     );
                   })}
                 </TableRow>

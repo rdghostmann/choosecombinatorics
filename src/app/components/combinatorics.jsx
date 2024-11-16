@@ -10,9 +10,11 @@ const Combinatorics = () => {
   const [userNumbers, setUserNumbers] = useState(Array(5).fill('')); // State for user input numbers
   const [chooseN, setChooseN] = useState(2); // State for "choose n"
 
-  // Function to calculate the "choose n" sums and return modulus 90
+  // lFunction to calculate the "choose n" sums and return moduus 90
   const calculateChooseN = (n) => {
     const numbers = userNumbers.map(num => parseInt(num)).filter(num => !isNaN(num));
+   
+   
     let results = [];
 
     const combinations = (arr, n, start = 0, currentCombo = []) => {
