@@ -151,17 +151,17 @@ const PairedCombinatorics = () => {
                   Calculate Choose {chooseN}
                 </button>
                 <div className="flex justify-center my-4">
-                    <button
-                      className="bg-blue-500 text-white px-4 py-2 rounded"
-                      onClick={() => handleRandomize()}
-                    >
-                      Randomize
-                    </button>
-                  </div>
+                  <button
+                    className="bg-blue-500 text-white px-4 py-2 rounded"
+                    onClick={() => handleRandomize()}
+                  >
+                    Randomize
+                  </button>
+                </div>
               </div>
               <table className="w-full h-fit border border-black border-collapse text-center text-sm">
                 <thead>
-                
+
                   {Array.from({ length: 3 }).map((_, rowIndex) => (
                     <tr key={rowIndex} className="bg-gray-200">
                       {Array.from({ length: 15 }).map((_, colIndex) => {
