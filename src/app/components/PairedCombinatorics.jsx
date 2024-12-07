@@ -90,6 +90,21 @@ const PairedCombinatorics = () => {
     setAnalyticsData(highlightedData.length > 0 ? highlightedData : [["No pairs found"]]);
   };
 
+  // Function to shuffle the userNumbers array
+  const handleRandomize = () => {
+    const shuffledNumbers = [...userNumbers]
+      .filter(num => num !== '') // Exclude empty inputs
+      .sort(() => Math.random() - 0.5); // Shuffle the array
+
+    // Fill empty inputs with blank strings after shuffling
+    while (shuffledNumbers.length < userNumbers.length) {
+      shuffledNumbers.push('');
+    }
+
+    setUserNumbers(shuffledNumbers); // Update state with shuffled numbers
+  };
+
+
   return (
     <>
       <section className="hidden md:block text-xs">
@@ -135,9 +150,18 @@ const PairedCombinatorics = () => {
                 <button onClick={handleCalculate} className="mx-auto bg-slate-700 text-white rounded px-2 py-1">
                   Calculate Choose {chooseN}
                 </button>
+                <div className="flex justify-center my-4">
+                    <button
+                      className="bg-blue-500 text-white px-4 py-2 rounded"
+                      onClick={() => handleRandomize()}
+                    >
+                      Randomize
+                    </button>
+                  </div>
               </div>
               <table className="w-full h-fit border border-black border-collapse text-center text-sm">
                 <thead>
+                
                   {Array.from({ length: 3 }).map((_, rowIndex) => (
                     <tr key={rowIndex} className="bg-gray-200">
                       {Array.from({ length: 15 }).map((_, colIndex) => {
@@ -163,6 +187,7 @@ const PairedCombinatorics = () => {
                     </tr>
                   ))}
                 </thead>
+
                 <tbody ref={tbl}>
                   {Array.from({ length: Math.ceil(modResults.length / 15) }).map((_, rowIndex) => (
                     <tr key={rowIndex} className="border border-black border-collapse">
