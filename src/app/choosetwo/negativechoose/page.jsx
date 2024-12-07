@@ -1,6 +1,7 @@
 "use client";
 
-import MinusCombinatorics from "@/app/components/MinusCombinatorics";
+import MinusCombinatorics from "../../components/MinusCombinatorics";
+
 
 
 const page = () => {
