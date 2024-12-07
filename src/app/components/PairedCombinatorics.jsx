@@ -152,10 +152,10 @@ const PairedCombinatorics = () => {
                 </button>
                 <div className="flex justify-center my-4">
                   <button
-                    className="bg-blue-500 text-white px-4 py-2 rounded"
+                    className="bg-gradient-to-tr focus:outline-1 outline-sky-300 from-violet-500 via-orange-400 to-blue-500 text-white px-4 py-2 rounded"
                     onClick={() => handleRandomize()}
                   >
-                    Randomize
+                    Randomize 
                   </button>
                 </div>
               </div>
