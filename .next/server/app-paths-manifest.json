@@ -1,7 +1,7 @@
 {
-  "/page": "app/page.js",
-  "/choosetwo/pairedchoose/page": "app/choosetwo/pairedchoose/page.js",
+  "/combo/negativepair/page": "app/combo/negativepair/page.js",
   "/choosetwo/page": "app/choosetwo/page.js",
-  "/choosetwo/productpair/page": "app/choosetwo/productpair/page.js",
-  "/choosetwo/negativepair/page": "app/choosetwo/negativepair/page.js"
+  "/choosetwo/multiplychoose/page": "app/choosetwo/multiplychoose/page.js",
+  "/combo/productpair/page": "app/combo/productpair/page.js",
+  "/combo/multiplychoose/page": "app/combo/multiplychoose/page.js"
 }

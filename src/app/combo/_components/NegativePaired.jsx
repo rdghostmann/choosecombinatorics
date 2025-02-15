@@ -1,6 +1,6 @@
 "use client";
 import React, { useRef, useState } from 'react';
-import targetPairs from '../../lib/targetPair';
+import targetPairs from '../../../lib/targetPair';
 
 
 const NegativePaired = () => {
@@ -8,8 +8,8 @@ const NegativePaired = () => {
   const [analyticsData, setAnalyticsData] = useState([]);
   const [modResults, setModResults] = useState([]);
   const [userNumbers, setUserNumbers] = useState(Array(5).fill('')); // State for user input numbers
-  const [chooseN, setChooseN] = useState(2); // State for "choose n"
-
+  const [chooseN, setChooseN] = useState(12); // State for "choose n"
+  const [factor, setFactor] = useState(2);
   // Function to calculate the "choose n" sums and return modulus 90
   const calculateChooseN = (n) => {
     const numbers = userNumbers.map(num => parseInt(num)).filter(num => !isNaN(num));

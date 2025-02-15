@@ -9,30 +9,7 @@ const Combinatorics = () => {
   const [modResults, setModResults] = useState([]);
   const [userNumbers, setUserNumbers] = useState(Array(5).fill('')); // State for user input numbers
   const [chooseN, setChooseN] = useState(2); // State for "choose n"
-  const [factor, setFactor] = useState(44);
-
-
-  // Function to calculate the "choose n" sums and return moduus 90
-  const calculateChooseN = (n) => {
-    const numbers = userNumbers.map(num => parseInt(num)).filter(num => !isNaN(num));
-
-
-    let results = [];
-
-    const combinations = (arr, n, start = 0, currentCombo = []) => {
-      if (currentCombo.length === n) {
-        const sum = currentCombo.reduce((acc, val) => acc + val, 0);
-        results.push(sum % 90);
-        return;
-      }
-      for (let i = start; i < arr.length; i++) {
-        combinations(arr, n, i + 1, [...currentCombo, arr[i]]);
-      }
-    };
-
-    combinations(numbers, n);
-    return results;
-  };
+  const [factor, setFactor] = useState(2);
 
   const calculateNChooseN = (n) => {
     const numArray = userNumbers.map(num => parseInt(num)).filter(num => !isNaN(num));
@@ -55,36 +32,21 @@ const Combinatorics = () => {
     return resultArray;
   };
 
-  // Handle calculation and store the mod results
-  const handleCalculate = () => {
-    if (chooseN < 2 || chooseN > 44) {
-      alert("Choose n must be between 2 and 44");
-      return;
-    }
-    const results = calculateChooseN(chooseN);
-
-    setModResults(results);
-    setTimeout(() => {
-      handleResultCheck();
-    }, 2000);
-    confirm(`Choose ${chooseN} generated`);
-  };
 
   // Handle calculation and store the mod results
   const handleCalculateCombo = () => {
-    if (chooseN < 2 || chooseN > 44) {
+    if (factor < 2 || factor > 44) {
       alert("Choose n must be between 2 and 44");
       return;
     }
-    const results = calculateNChooseN(chooseN);
+    const results = calculateNChooseN(factor);
 
     setModResults(results);
     setTimeout(() => {
       handleResultCheck();
     }, 2000);
-    confirm(`Choose ${chooseN} generated`);
+    confirm(`Choose ${factor} generated`);
   };
-
 
   // Handle ResultChecker
   const handleResultCheck = () => {
@@ -180,7 +142,7 @@ const Combinatorics = () => {
               </div>
 
             </div>
-            <div className="">
+            <div className="w-9/12 h-fit">
               <div className="flex space-x-4 w-9/12 h-fit">
                 <div className="max-w-fit my-5 flex flex-col items-center">
                   <label htmlFor="choose-n" className="text-sm font-light">
@@ -191,12 +153,12 @@ const Combinatorics = () => {
                     type="number"
                     min="2"
                     max="7"
-                    value={chooseN}
-                    onChange={(e) => setChooseN(parseInt(e.target.value))}
+                    value={factor}
+                    onChange={(e) => setFactor(parseInt(e.target.value))}
                     className="p-1 mb-2 border rounded"
                   />
                   <button onClick={handleCalculateCombo} className="mx-auto bg-slate-700 text-white rounded px-2 py-1">
-                    Calculate Choose Combo {chooseN}
+                    Calculate Choose Combo {factor}
                   </button>
                 </div>
 

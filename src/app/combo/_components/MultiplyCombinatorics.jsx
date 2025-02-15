@@ -8,6 +8,7 @@ const MultiplicationCombinatorics = () => {
   const [modResults, setModResults] = useState([]);
   const [userNumbers, setUserNumbers] = useState(Array(5).fill('')); // State for user input numbers
   const [chooseN, setChooseN] = useState(2); // State for "choose n"
+    const [factor, setFactor] = useState(2);
 
   // Function to calculate the "choose n" multiplications and return modulus 90
   const calculateChooseN = (n) => {
@@ -159,22 +160,44 @@ const MultiplicationCombinatorics = () => {
               </div>
             </div>
             <div className="w-9/12 h-fit">
-              <div className="max-w-fit my-5 flex flex-col items-center">
-                <label htmlFor="choose-n" className="text-sm font-light">
-                  Choose N:
-                </label>
-                <input
-                  id="choose-n"
-                  type="number"
-                  min="2"
-                  max="44"
-                  value={chooseN}
-                  onChange={(e) => setChooseN(parseInt(e.target.value))}
-                  className="p-1 mb-2 border rounded"
-                />
+            <div className="flex space-x-4 w-9/12 h-fit">
+                <div className="max-w-fit my-5 flex flex-col items-center">
+                  <label htmlFor="choose-n" className="text-sm font-light">
+                    Choose N:
+                  </label>
+                  <input
+                    id="choose-n"
+                    type="number"
+                    min="2"
+                    max="7"
+                    value={factor}
+                    onChange={(e) => setFactor(parseInt(e.target.value))}
+                    className="p-1 mb-2 border rounded"
+                  />
                   <button onClick={handleCalculateCombo} className="mx-auto bg-slate-700 text-white rounded px-2 py-1">
-                    Calculate Choose Combo {chooseN}
+                    Calculate Choose Combo {factor}
                   </button>
+                </div>
+
+                <div className="max-w-fit my-5 flex flex-col items-center">
+                  <label style={{ visibility: "hidden" }} htmlFor="choose-n" className="text-sm font-light">
+                    Choose N:
+                  </label>
+                  <input style={{ visibility: "hidden" }}
+                    id="choose-n"
+                    type="number"
+                    min="2"
+                    max="7"
+                    value={chooseN}
+                    onChange={(e) => setChooseN(parseInt(e.target.value))}
+                    className="p-1 mb-2 border rounded"
+                  />
+                  <button onClick={() => handleRandomize()} className="mx-auto bg-gradient-to-tr focus:outline-1 outline-sky-300 from-violet-500 via-orange-400 to-blue-500 text-white rounded px-2 py-1">
+                    Randomize
+                  </button>
+                </div>
+
+
               </div>
               <table ref={tbl} className="w-full h-fit border border-black border-collapse text-center text-sm">
                 <thead>

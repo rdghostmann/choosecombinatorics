@@ -79,7 +79,7 @@ const Combinatorics = () => {
           <div className="flex flex-row space-x-1 sm:flex">
             <div className="border w-1/4 mx-auto p-2 flex flex-col result-checker">
               <h2 className="animate-bounce w- p-2 m-2 text-sm text-center font-bold ">
-                Number Pool 🎱🎱
+                Number Pool1 🎱🎱
               </h2>
               <hr className="border-2 mx-auto w-3/4" />
               <p className="w-4/5 mx-auto p-2 m-2 font-light text-center">
