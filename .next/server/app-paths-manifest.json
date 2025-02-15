@@ -1,7 +1,7 @@
 {
-  "/combo/negativepair/page": "app/combo/negativepair/page.js",
-  "/choosetwo/page": "app/choosetwo/page.js",
-  "/choosetwo/multiplychoose/page": "app/choosetwo/multiplychoose/page.js",
+  "/sequenceViewN9uYVzKXC7QfDqwMkvHwIRTG&modettsequenceMNGN9uYVzKXC7QfDqwMkvHwIRTG&mode/page": "app/sequenceViewN9uYVzKXC7QfDqwMkvHwIRTG&modettsequenceMNGN9uYVzKXC7QfDqwMkvHwIRTG&mode/page.js",
   "/combo/productpair/page": "app/combo/productpair/page.js",
-  "/combo/multiplychoose/page": "app/combo/multiplychoose/page.js"
+  "/combo/multiplychoose/page": "app/combo/multiplychoose/page.js",
+  "/combo/pairedchoose/page": "app/combo/pairedchoose/page.js",
+  "/permute/page": "app/permute/page.js"
 }
