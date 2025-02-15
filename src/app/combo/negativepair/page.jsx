@@ -1,9 +1,11 @@
 "use client";
 
 import NegativePaired from "../_components/NegativePaired";
+import useAuthMiddleware from '../../../app/middleware/middleware';
 
 
 const page = () => {
+  useAuthMiddleware();
 
 
   return (

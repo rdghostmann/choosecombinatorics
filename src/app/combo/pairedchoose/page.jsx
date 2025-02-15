@@ -1,9 +1,11 @@
 "use client";
 import PairedCombinatorics from '../_components/PairedCombinatorics'
+import useAuthMiddleware from '../../../app/middleware/middleware';
 
 
 
 const page = () => {
+  useAuthMiddleware();
 
 
   return (

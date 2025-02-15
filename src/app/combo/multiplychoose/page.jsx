@@ -1,8 +1,10 @@
 "use client";
 
 import MultiplyCombinatorics from '../_components/MultiplyCombinatorics'
+import useAuthMiddleware from '../../../app/middleware/middleware';
 
 const page = () => {
+  useAuthMiddleware();
 
 
   return (

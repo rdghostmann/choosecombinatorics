@@ -21,16 +21,6 @@
       "static/chunks/main-app.js",
       "static/chunks/app/choosetwo/layout.js"
     ],
-    "/combo/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/combo/page.js"
-    ],
-    "/combo/layout": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/combo/layout.js"
-    ],
     "/permute/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -41,35 +31,15 @@
       "static/chunks/main-app.js",
       "static/chunks/app/permute/layout.js"
     ],
-    "/combo/negativepair/page": [
+    "/combo/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/combo/negativepair/page.js"
+      "static/chunks/app/combo/page.js"
     ],
-    "/choosetwo/productpair/page": [
+    "/combo/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/choosetwo/productpair/page.js"
-    ],
-    "/choosetwo/negativepair/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/choosetwo/negativepair/page.js"
-    ],
-    "/choosetwo/pairedchoose/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/choosetwo/pairedchoose/page.js"
-    ],
-    "/choosetwo/multiplychoose/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/choosetwo/multiplychoose/page.js"
-    ],
-    "/choosetwo/negativechoose/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/choosetwo/negativechoose/page.js"
+      "static/chunks/app/combo/layout.js"
     ],
     "/combo/negativechoose/page": [
       "static/chunks/webpack.js",
@@ -86,15 +56,15 @@
       "static/chunks/main-app.js",
       "static/chunks/app/combo/pairedchoose/page.js"
     ],
-    "/combo/productpair/page": [
+    "/combo/negativepair/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/combo/productpair/page.js"
+      "static/chunks/app/combo/negativepair/page.js"
     ],
-    "/sequenceViewN9uYVzKXC7QfDqwMkvHwIRTG&modettsequenceMNGN9uYVzKXC7QfDqwMkvHwIRTG&mode/page": [
+    "/not-found": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/sequenceViewN9uYVzKXC7QfDqwMkvHwIRTG&modettsequenceMNGN9uYVzKXC7QfDqwMkvHwIRTG&mode/page.js"
+      "static/chunks/app/not-found.js"
     ]
   }
 }

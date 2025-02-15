@@ -2,6 +2,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
 
+import LogOutBtn from "../app/components/LogOutBtn"
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -26,6 +28,7 @@ export default function RootLayout({ children }) {
           <Link className="grid place-items-center m-3 w-fit px-2 py-1 rounded-lg border border-gray-500 focus:border-2 focus:border-gray-800 bg-gray-300" href="/choosetwo">
             🛑ChooseTwo2<span className="hidden">ChooseTwo2</span>
           </Link>
+          <LogOutBtn />
         </nav>
         <h1 className="flex-1 font-bold text-center text-xl text-white">Unleash the Power of Combinatorics!</h1>
       </header>

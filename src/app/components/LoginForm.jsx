@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import useAuthMiddleware from '../../app/middleware/middleware';
 
 const LoginForm = () => {
   const [username, setUsername] = useState('');
@@ -19,6 +20,7 @@ const LoginForm = () => {
       alert('Invalid username or password');
     }
   }
+  useAuthMiddleware();
 
 
   return (

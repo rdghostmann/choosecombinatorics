@@ -1,9 +1,11 @@
 "use client";
 
 import ProductPaired from "../_components/ProductPaired";
+import useAuthMiddleware from '../../../app/middleware/middleware';
 
 
 const page = () => {
+  useAuthMiddleware();
 
 
   return (
