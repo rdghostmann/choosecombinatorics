@@ -7,8 +7,8 @@ const PageLayout = ({ children }) => {
     <div className="min-h-screen flex flex-col">
       <header className="mx-auto flex flex-col justify-between w-full py-2 px-5 mb-4 bg-blue-500 sticky top-0 left-0 z-10 shadow-sm">
         <nav className="w-full flex items-center justify-center border-black">
-        <Link className="grid place-items-center m-3 w-[38px] px-2 py-1 rounded-lg border border-gray-500 focus:border-2 focus:border-gray-800 bg-gray-300" href="/sequenceViewN9uYVzKXC7QfDqwMkvHwIRTG&modettsequenceMNGN9uYVzKXC7QfDqwMkvHwIRTG&mode">
-          <span className="">Sequence Generator</span>
+        <Link className="grid place-items-center m-3 w-fit px-2 py-1 rounded-lg border border-gray-500 focus:border-2 focus:border-gray-800 bg-gray-300" href="/sequenceViewN9uYVzKXC7QfDqwMkvHwIRTG&modettsequenceMNGN9uYVzKXC7QfDqwMkvHwIRTG&mode">
+          <span className="">SeqG</span>
           </Link>
           <Link className="grid place-items-center m-3 w-[38px] px-2 py-1 rounded-lg border border-gray-500 focus:border-2 focus:border-gray-800 bg-gray-300" href="/combo">
             ➕ <span className="hidden">Combinatorics</span>
@@ -28,13 +28,7 @@ const PageLayout = ({ children }) => {
           <Link className="grid place-items-center m-3 w-fit px-2 py-1 rounded-lg border border-gray-500 focus:border-2 focus:border-gray-800 bg-gray-300" href="/combo/productpair">
            🟦X   <span className="hidden">Combinatorics</span>
           </Link>
-          <Link className="grid place-items-center m-3 w-fit px-2 py-1 rounded-lg border border-gray-500 focus:border-2 focus:border-gray-800 bg-gray-300" href="/permute">
-           💥🌈Perm&Combo  <span className="hidden">Combinatorics</span>
-          </Link>
-          <Link className="grid place-items-center m-3 w-fit px-2 py-1 rounded-lg border border-gray-500 focus:border-2 focus:border-gray-800 bg-gray-300" href="/choosetwo">
-           ◀Back  <span className="hidden">back-btn</span>
-          </Link>
-          
+        
         </nav>
         <h1 className="flex-1 font-bold text-center text-xl text-white">Unleash the Power of Combo!</h1>
       </header>
