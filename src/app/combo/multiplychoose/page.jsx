@@ -1,6 +1,6 @@
 "use client";
 
-import MultiplyCombinatorics from '../../components/MultiplyCombinatorics'
+import MultiplyCombinatorics from '../_components/MultiplyCombinatorics'
 
 const page = () => {
 

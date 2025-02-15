@@ -1,6 +1,6 @@
 "use client";
 
-import ProductPaired from "../../components/ProductPaired";
+import ProductPaired from "../_components/ProductPaired";
 
 
 const page = () => {

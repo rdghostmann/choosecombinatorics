@@ -1,6 +1,6 @@
 "use client";
 
-import MinusCombinatorics from "../../components/MinusCombinatorics";
+import MinusCombinatorics from "../_components/MinusCombinatorics";
 
 
 

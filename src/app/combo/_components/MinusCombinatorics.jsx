@@ -2,27 +2,23 @@
 "use client";
 import React, { useRef, useState } from 'react';
 
-const Combinatorics = () => {
+const MinusCombinatorics = () => {
   const tbl = useRef(null);
   const [inputValues, setInputValues] = useState(Array.from({ length: 90 }, (_, i) => i + 1));
   const [analyticsData, setAnalyticsData] = useState([]);
   const [modResults, setModResults] = useState([]);
   const [userNumbers, setUserNumbers] = useState(Array(5).fill('')); // State for user input numbers
   const [chooseN, setChooseN] = useState(2); // State for "choose n"
-  const [factor, setFactor] = useState(44);
 
-
-  // Function to calculate the "choose n" sums and return moduus 90
+  // Function to calculate the "choose n" subtractions and return modulus 90
   const calculateChooseN = (n) => {
     const numbers = userNumbers.map(num => parseInt(num)).filter(num => !isNaN(num));
-
-
     let results = [];
 
     const combinations = (arr, n, start = 0, currentCombo = []) => {
       if (currentCombo.length === n) {
-        const sum = currentCombo.reduce((acc, val) => acc + val, 0);
-        results.push(sum % 90);
+        const subtraction = currentCombo.reduce((acc, val) => acc - val, currentCombo[0] * 2);
+        results.push(((subtraction % 90) + 90) % 90); // Ensure non-negative modulus
         return;
       }
       for (let i = start; i < arr.length; i++) {
@@ -43,7 +39,7 @@ const Combinatorics = () => {
     }
 
     const resultArray = []; // Store computed mod results
-    let sum = numArray.slice(0, factor).reduce((acc, val) => acc + val, 0); // Sum first 'factor' elements
+    let sum = numArray.slice(0, factor).reduce((acc, val) => acc - val, 0); // Sum first 'factor' elements
 
     resultArray.push(sum > 90 ? sum % 90 : sum); // Apply modulo 90
 
@@ -55,6 +51,7 @@ const Combinatorics = () => {
     return resultArray;
   };
 
+
   // Handle calculation and store the mod results
   const handleCalculate = () => {
     if (chooseN < 2 || chooseN > 44) {
@@ -62,29 +59,27 @@ const Combinatorics = () => {
       return;
     }
     const results = calculateChooseN(chooseN);
-
     setModResults(results);
     setTimeout(() => {
       handleResultCheck();
     }, 2000);
-    confirm(`Choose ${chooseN} generated`);
+    confirm(`Negative Choose ${chooseN} generated`);
   };
 
-  // Handle calculation and store the mod results
-  const handleCalculateCombo = () => {
-    if (chooseN < 2 || chooseN > 44) {
-      alert("Choose n must be between 2 and 44");
-      return;
-    }
-    const results = calculateNChooseN(chooseN);
-
-    setModResults(results);
-    setTimeout(() => {
-      handleResultCheck();
-    }, 2000);
-    confirm(`Choose ${chooseN} generated`);
-  };
-
+    // Handle calculation and store the mod results
+    const handleCalculateCombo = () => {
+      if (chooseN < 2 || chooseN > 44) {
+        alert("Choose n must be between 2 and 44");
+        return;
+      }
+      const results = calculateNChooseN(chooseN);
+  
+      setModResults(results);
+      setTimeout(() => {
+        handleResultCheck();
+      }, 2000);
+      confirm(`Choose ${chooseN} generated`);
+    };
 
   // Handle ResultChecker
   const handleResultCheck = () => {
@@ -98,7 +93,7 @@ const Combinatorics = () => {
       if (inputValue !== '') {
         for (let j = 0; j < tableCells.length; j++) {
           if (parseInt(tableCells[j].innerText) === parseInt(inputValue)) {
-            tableCells[j].classList.add('bg-green-400', 'text-white');
+            tableCells[j].classList.add('bg-reg-400', 'text-white');
 
             if (analytics[inputValue]) {
               analytics[inputValue] += 1;
@@ -111,20 +106,6 @@ const Combinatorics = () => {
     }
     setInputValues(newInputValues);
     setAnalyticsData(Object.entries(analytics));
-  };
-
-  // Function to shuffle the userNumbers array
-  const handleRandomize = () => {
-    const shuffledNumbers = [...userNumbers]
-      .filter(num => num !== '') // Exclude empty inputs
-      .sort(() => Math.random() - 0.5); // Shuffle the array
-
-    // Fill empty inputs with blank strings after shuffling
-    while (shuffledNumbers.length < userNumbers.length) {
-      shuffledNumbers.push('');
-    }
-
-    setUserNumbers(shuffledNumbers); // Update state with shuffled numbers
   };
 
   return (
@@ -164,11 +145,11 @@ const Combinatorics = () => {
                   </div>
                 </div>
                 <div className="flex flex-col items-stretch w-[45%] p-1" id="analytics">
-                  <p className="w-full bg-slate-200 p-1 mb-1 text-center text-[10px] sm:text-xs">
+                  <p className="w-full  bg-slate-200 p-1 mb-1 text-center text-[10px] sm:text-xs">
                     Analytics Pairs
                   </p>
                   <div className="w-full h-full mx-auto text-center border border-white bg-transparent shadow-lg" id="analytics-content">
-                    <ul className="mx-auto ">
+                    <ul className="mx-auto  ">
                       {analyticsData.map(([key, value]) => (
                         <li key={key} className="w-full border-b border-white last:border-none py-2">
                           <b className="">{key}</b> {' - '}{' '}<span className="italic">{value} pairs</span>
@@ -180,85 +161,63 @@ const Combinatorics = () => {
               </div>
 
             </div>
-            <div className="">
-              <div className="flex space-x-4 w-9/12 h-fit">
-                <div className="max-w-fit my-5 flex flex-col items-center">
-                  <label htmlFor="choose-n" className="text-sm font-light">
-                    Choose N:
-                  </label>
-                  <input
-                    id="choose-n"
-                    type="number"
-                    min="2"
-                    max="7"
-                    value={chooseN}
-                    onChange={(e) => setChooseN(parseInt(e.target.value))}
-                    className="p-1 mb-2 border rounded"
-                  />
-                  <button onClick={handleCalculateCombo} className="mx-auto bg-slate-700 text-white rounded px-2 py-1">
+            <div className="w-9/12 h-fit">
+            <div className="max-w-fit my-5 flex flex-col items-center">
+              <label htmlFor="choose-n" className="text-sm font-light">
+                Choose N:
+              </label>
+              <input
+                id="choose-n"
+                type="number"
+                min="2"
+                max="7"
+                value={chooseN}
+                onChange={(e) => setChooseN(parseInt(e.target.value))}
+                className="p-1 mb-2 border rounded"
+              />
+                <button onClick={handleCalculateCombo} className="mx-auto bg-slate-700 text-white rounded px-2 py-1">
                     Calculate Choose Combo {chooseN}
                   </button>
-                </div>
-
-                <div className="max-w-fit my-5 flex flex-col items-center">
-                  <label style={{ visibility: "hidden" }} htmlFor="choose-n" className="text-sm font-light">
-                    Choose N:
-                  </label>
-                  <input style={{ visibility: "hidden" }}
-                    id="choose-n"
-                    type="number"
-                    min="2"
-                    max="7"
-                    value={chooseN}
-                    onChange={(e) => setChooseN(parseInt(e.target.value))}
-                    className="p-1 mb-2 border rounded"
-                  />
-                  <button onClick={() => handleRandomize()} className="mx-auto bg-gradient-to-tr focus:outline-1 outline-sky-300 from-violet-500 via-orange-400 to-blue-500 text-white rounded px-2 py-1">
-                    Randomize
-                  </button>
-                </div>
-
-
-              </div>
-              <table ref={tbl} className="w-full h-fit border border-black border-collapse text-center text-sm">
-                <thead>
-                  {Array.from({ length: 3 }).map((_, rowIndex) => (
-                    <tr key={rowIndex} className="bg-gray-200">
-                      {Array.from({ length: 15 }).map((_, colIndex) => {
-                        const index = rowIndex * 15 + colIndex;
-                        return (
-                          <td key={index} className="border pb-3 border-black text-xs border-collapse">
-                            <div className="text-xs text-center mb-1">col{index + 1}</div>
-                            <input
-                              className="w-full mx-auto text-xs p-2 m-1 border rounded"
-                              type="number"
-                              min={1}
-                              max={90}
-                              value={userNumbers[index] || ''}
-                              onChange={(e) => {
-                                const newNumbers = [...userNumbers];
-                                newNumbers[index] = e.target.value;
-                                setUserNumbers(newNumbers);
-                              }}
-                            />
-                          </td>
-                        );
-                      })}
-                    </tr>
-                  ))}
-                </thead>
-                <tbody>
-                  {Array.from({ length: Math.ceil(modResults.length / 15) }).map((_, rowIndex) => (
-                    <tr key={rowIndex} className="border border-black border-collapse">
-                      {modResults.slice(rowIndex * 15, (rowIndex + 1) * 15).map((result, colIndex) => (
-                        <td key={colIndex} className="border border-black text-xs border-collapse bg-green-400 text-white">
-                          {result}
+            </div>
+            <table ref={tbl} className="w-full h-fit border border-black border-collapse text-center text-sm">
+              <thead>
+                {Array.from({ length: 3 }).map((_, rowIndex) => (
+                  <tr key={rowIndex} className="bg-gray-200">
+                    {Array.from({ length: 15 }).map((_, colIndex) => {
+                      const index = rowIndex * 15 + colIndex;
+                      return (
+                        <td key={index} className="border pb-3 border-black text-xs border-collapse">
+                          <div className="text-xs text-center mb-1">col{index + 1}</div>
+                          <input
+                            className="w-full mx-auto text-xs p-2 m-1 border rounded"
+                            type="number"
+                            min={1}
+                            max={90}
+                            value={userNumbers[index] || ''}
+                            onChange={(e) => {
+                              const newNumbers = [...userNumbers];
+                              newNumbers[index] = e.target.value;
+                              setUserNumbers(newNumbers);
+                            }}
+                          />
                         </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                      );
+                    })}
+                  </tr>
+                ))}
+              </thead>
+              <tbody>
+                {Array.from({ length: Math.ceil(modResults.length / 15) }).map((_, rowIndex) => (
+                  <tr key={rowIndex} className="border border-black border-collapse">
+                    {modResults.slice(rowIndex * 15, (rowIndex + 1) * 15).map((result, colIndex) => (
+                      <td key={colIndex} className="border border-black text-xs border-collapse bg-green-400 text-white">
+                        {result}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
             </div>
           </div>
         </div>
@@ -274,4 +233,4 @@ const Combinatorics = () => {
   );
 };
 
-export default Combinatorics;
+export default MinusCombinatorics;

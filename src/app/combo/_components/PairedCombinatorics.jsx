@@ -1,22 +1,17 @@
-// Combinatorics Component
 "use client";
 import React, { useRef, useState } from 'react';
+import targetPairs from '../../lib/targetPair';
 
-const Combinatorics = () => {
+const PairedCombinatorics = () => {
   const tbl = useRef(null);
-  const [inputValues, setInputValues] = useState(Array.from({ length: 90 }, (_, i) => i + 1));
   const [analyticsData, setAnalyticsData] = useState([]);
   const [modResults, setModResults] = useState([]);
   const [userNumbers, setUserNumbers] = useState(Array(5).fill('')); // State for user input numbers
   const [chooseN, setChooseN] = useState(2); // State for "choose n"
-  const [factor, setFactor] = useState(44);
 
-
-  // Function to calculate the "choose n" sums and return moduus 90
+  // Function to calculate the "choose n" sums and return modulus 90
   const calculateChooseN = (n) => {
     const numbers = userNumbers.map(num => parseInt(num)).filter(num => !isNaN(num));
-
-
     let results = [];
 
     const combinations = (arr, n, start = 0, currentCombo = []) => {
@@ -55,6 +50,7 @@ const Combinatorics = () => {
     return resultArray;
   };
 
+
   // Handle calculation and store the mod results
   const handleCalculate = () => {
     if (chooseN < 2 || chooseN > 44) {
@@ -62,7 +58,6 @@ const Combinatorics = () => {
       return;
     }
     const results = calculateChooseN(chooseN);
-
     setModResults(results);
     setTimeout(() => {
       handleResultCheck();
@@ -70,6 +65,7 @@ const Combinatorics = () => {
     confirm(`Choose ${chooseN} generated`);
   };
 
+  
   // Handle calculation and store the mod results
   const handleCalculateCombo = () => {
     if (chooseN < 2 || chooseN > 44) {
@@ -86,31 +82,51 @@ const Combinatorics = () => {
   };
 
 
-  // Handle ResultChecker
   const handleResultCheck = () => {
-    const newInputValues = [...inputValues];
     const tableCells = tbl?.current.querySelectorAll('td');
     const analytics = {};
 
-    for (let i = 0; i < inputValues.length; i++) {
-      const inputValue = inputValues[i];
 
-      if (inputValue !== '') {
-        for (let j = 0; j < tableCells.length; j++) {
-          if (parseInt(tableCells[j].innerText) === parseInt(inputValue)) {
-            tableCells[j].classList.add('bg-green-400', 'text-white');
 
-            if (analytics[inputValue]) {
-              analytics[inputValue] += 1;
-            } else {
-              analytics[inputValue] = 1;
-            }
+    // Clear previous highlights
+    tableCells.forEach(cell => cell.classList.remove('bg-purple-500', 'text-white'));
+
+    // Traverse each row to find specific adjacent pairs and count occurrences
+    for (let i = 0; i < tableCells.length - 1; i++) {
+      const currentCell = tableCells[i];
+      const nextCell = tableCells[i + 1];
+      const currentNum = currentCell.innerText.trim();
+      const nextNum = nextCell.innerText.trim();
+
+      // Check if the current pair matches any of the target patterns
+      targetPairs.forEach(([first, second]) => {
+        if (currentNum === first && nextNum === second) {
+          const pairKey = `${first} ${second}`;
+
+          // Track pairs and their occurrences
+          if (analytics[pairKey]) {
+            analytics[pairKey].push([currentCell, nextCell]);
+          } else {
+            analytics[pairKey] = [[currentCell, nextCell]];
           }
         }
-      }
+      });
     }
-    setInputValues(newInputValues);
-    setAnalyticsData(Object.entries(analytics));
+
+    // Highlight only pairs that appear more than once and update analyticsData
+    const highlightedData = [];
+    Object.entries(analytics).forEach(([pairKey, cellPairs]) => {
+      if (cellPairs.length > 1) { // Only highlight if the pair appears more than once
+        cellPairs.forEach(([currentCell, nextCell]) => {
+          currentCell.classList.add('bg-purple-500', 'text-white');
+          nextCell.classList.add('bg-purple-500', 'text-white');
+        });
+        highlightedData.push([pairKey, cellPairs.length]); // Add pair and occurrence count
+      }
+    });
+
+    // Update analyticsData with pairs and counts
+    setAnalyticsData(highlightedData.length > 0 ? highlightedData : [["No pairs found"]]);
   };
 
   // Function to shuffle the userNumbers array
@@ -126,6 +142,7 @@ const Combinatorics = () => {
 
     setUserNumbers(shuffledNumbers); // Update state with shuffled numbers
   };
+
 
   return (
     <>
@@ -143,85 +160,47 @@ const Combinatorics = () => {
               <p className="text-center mx-auto bg-slate-700 text-white rounded px-2 py-1 m-2">
                 Result Checker runs 3secs for combinatorics values
               </p>
-              <div className="flex space-between">
-                <div className="w-[55%] pool-numbers m-0 rounded">
-                  <div className="check-inputs mx-auto bg-white p-2 flex justify-evenly flex-wrap gap-3 rounded-lg">
-                    {Array.from({ length: 90 }).map((_, index) => (
-                      <input
-                        key={index}
-                        className="rounded-full text-xs"
-                        type="number"
-                        value={inputValues[index]}
-                        onChange={(e) =>
-                          setInputValues((prevState) => {
-                            const newState = [...prevState];
-                            newState[index] = e.target.value;
-                            return newState;
-                          })
-                        }
-                      />
-                    ))}
-                  </div>
-                </div>
-                <div className="flex flex-col items-stretch w-[45%] p-1" id="analytics">
-                  <p className="w-full bg-slate-200 p-1 mb-1 text-center text-[10px] sm:text-xs">
-                    Analytics Pairs
-                  </p>
-                  <div className="w-full h-full mx-auto text-center border border-white bg-transparent shadow-lg" id="analytics-content">
-                    <ul className="mx-auto ">
-                      {analyticsData.map(([key, value]) => (
-                        <li key={key} className="w-full border-b border-white last:border-none py-2">
-                          <b className="">{key}</b> {' - '}{' '}<span className="italic">{value} pairs</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-
+              {/* Analytics Data Display */}
+              <section className="analytics mt-4 text-center">
+                <h3 className="text-lg font-semibold">Analytics Data</h3>
+                <ul className="list-disc list-inside">
+                  {analyticsData.map(([pair, count], index) => (
+                    <li key={index} className="text-sm">
+                      <p> Pair: <span className='font-bold'>{pair}</span> <br /> <span className='text-red-600 font-bold'>Occurrences:</span> {count}</p>
+                    </li>
+                  ))}
+                </ul>
+              </section>
             </div>
-            <div className="">
-              <div className="flex space-x-4 w-9/12 h-fit">
-                <div className="max-w-fit my-5 flex flex-col items-center">
-                  <label htmlFor="choose-n" className="text-sm font-light">
-                    Choose N:
-                  </label>
-                  <input
-                    id="choose-n"
-                    type="number"
-                    min="2"
-                    max="7"
-                    value={chooseN}
-                    onChange={(e) => setChooseN(parseInt(e.target.value))}
-                    className="p-1 mb-2 border rounded"
-                  />
-                  <button onClick={handleCalculateCombo} className="mx-auto bg-slate-700 text-white rounded px-2 py-1">
+            <div className="w-9/12 h-fit">
+              <div className="max-w-fit my-5 flex flex-col items-center">
+                <label htmlFor="choose-n" className="text-sm font-light">
+                  Choose N:
+                </label>
+                <input
+                  id="choose-n"
+                  type="number"
+                  min="2"
+                  max="7"
+                  value={chooseN}
+                  onChange={(e) => setChooseN(parseInt(e.target.value))}
+                  className="p-1 mb-2 border rounded"
+                />
+                 <button onClick={handleCalculateCombo} className="mx-auto bg-slate-700 text-white rounded px-2 py-1">
                     Calculate Choose Combo {chooseN}
                   </button>
-                </div>
-
-                <div className="max-w-fit my-5 flex flex-col items-center">
-                  <label style={{ visibility: "hidden" }} htmlFor="choose-n" className="text-sm font-light">
-                    Choose N:
-                  </label>
-                  <input style={{ visibility: "hidden" }}
-                    id="choose-n"
-                    type="number"
-                    min="2"
-                    max="7"
-                    value={chooseN}
-                    onChange={(e) => setChooseN(parseInt(e.target.value))}
-                    className="p-1 mb-2 border rounded"
-                  />
-                  <button onClick={() => handleRandomize()} className="mx-auto bg-gradient-to-tr focus:outline-1 outline-sky-300 from-violet-500 via-orange-400 to-blue-500 text-white rounded px-2 py-1">
-                    Randomize
+                <div className="flex justify-center my-4">
+                  <button
+                    className="bg-gradient-to-tr focus:outline-1 outline-sky-300 from-violet-500 via-orange-400 to-blue-500 text-white px-4 py-2 rounded"
+                    onClick={() => handleRandomize()}
+                  >
+                    Randomize 
                   </button>
                 </div>
-
-
               </div>
-              <table ref={tbl} className="w-full h-fit border border-black border-collapse text-center text-sm">
+              <table className="w-full h-fit border border-black border-collapse text-center text-sm">
                 <thead>
+
                   {Array.from({ length: 3 }).map((_, rowIndex) => (
                     <tr key={rowIndex} className="bg-gray-200">
                       {Array.from({ length: 15 }).map((_, colIndex) => {
@@ -247,11 +226,12 @@ const Combinatorics = () => {
                     </tr>
                   ))}
                 </thead>
-                <tbody>
+
+                <tbody ref={tbl}>
                   {Array.from({ length: Math.ceil(modResults.length / 15) }).map((_, rowIndex) => (
                     <tr key={rowIndex} className="border border-black border-collapse">
                       {modResults.slice(rowIndex * 15, (rowIndex + 1) * 15).map((result, colIndex) => (
-                        <td key={colIndex} className="border border-black text-xs border-collapse bg-green-400 text-white">
+                        <td key={colIndex} className="border border-black text-xs border-collapse">
                           {result}
                         </td>
                       ))}
@@ -264,14 +244,16 @@ const Combinatorics = () => {
         </div>
       </section>
 
-      <section className="block sm:block md:hidden w-full h-screen">
+      <section className="block sm:block md:hidden w-full h-scre  en">
         <div className="animate-bounce mx-auto mt-20 w-3/4">
           <p className="text-center text-xs">This is a Desktop Application</p>
           <p className="text-center text-xs">Please view with a Wider Screen</p>
         </div>
       </section>
+
+
     </>
   );
 };
 
-export default Combinatorics;
+export default PairedCombinatorics;

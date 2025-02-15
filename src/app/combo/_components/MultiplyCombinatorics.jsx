@@ -1,28 +1,23 @@
-// Combinatorics Component
 "use client";
 import React, { useRef, useState } from 'react';
 
-const Combinatorics = () => {
+const MultiplicationCombinatorics = () => {
   const tbl = useRef(null);
   const [inputValues, setInputValues] = useState(Array.from({ length: 90 }, (_, i) => i + 1));
   const [analyticsData, setAnalyticsData] = useState([]);
   const [modResults, setModResults] = useState([]);
   const [userNumbers, setUserNumbers] = useState(Array(5).fill('')); // State for user input numbers
   const [chooseN, setChooseN] = useState(2); // State for "choose n"
-  const [factor, setFactor] = useState(44);
 
-
-  // Function to calculate the "choose n" sums and return moduus 90
+  // Function to calculate the "choose n" multiplications and return modulus 90
   const calculateChooseN = (n) => {
     const numbers = userNumbers.map(num => parseInt(num)).filter(num => !isNaN(num));
-
-
     let results = [];
 
     const combinations = (arr, n, start = 0, currentCombo = []) => {
       if (currentCombo.length === n) {
-        const sum = currentCombo.reduce((acc, val) => acc + val, 0);
-        results.push(sum % 90);
+        const product = currentCombo.reduce((acc, val) => acc * val, 1);
+        results.push(product % 90);
         return;
       }
       for (let i = start; i < arr.length; i++) {
@@ -43,7 +38,7 @@ const Combinatorics = () => {
     }
 
     const resultArray = []; // Store computed mod results
-    let sum = numArray.slice(0, factor).reduce((acc, val) => acc + val, 0); // Sum first 'factor' elements
+    let sum = numArray.slice(0, factor).reduce((acc, val) => acc * val, 0); // Sum first 'factor' elements
 
     resultArray.push(sum > 90 ? sum % 90 : sum); // Apply modulo 90
 
@@ -62,12 +57,11 @@ const Combinatorics = () => {
       return;
     }
     const results = calculateChooseN(chooseN);
-
     setModResults(results);
     setTimeout(() => {
       handleResultCheck();
     }, 2000);
-    confirm(`Choose ${chooseN} generated`);
+    confirm(`Multiplication Choose ${chooseN} generated`);
   };
 
   // Handle calculation and store the mod results
@@ -84,7 +78,6 @@ const Combinatorics = () => {
     }, 2000);
     confirm(`Choose ${chooseN} generated`);
   };
-
 
   // Handle ResultChecker
   const handleResultCheck = () => {
@@ -111,20 +104,6 @@ const Combinatorics = () => {
     }
     setInputValues(newInputValues);
     setAnalyticsData(Object.entries(analytics));
-  };
-
-  // Function to shuffle the userNumbers array
-  const handleRandomize = () => {
-    const shuffledNumbers = [...userNumbers]
-      .filter(num => num !== '') // Exclude empty inputs
-      .sort(() => Math.random() - 0.5); // Shuffle the array
-
-    // Fill empty inputs with blank strings after shuffling
-    while (shuffledNumbers.length < userNumbers.length) {
-      shuffledNumbers.push('');
-    }
-
-    setUserNumbers(shuffledNumbers); // Update state with shuffled numbers
   };
 
   return (
@@ -168,7 +147,7 @@ const Combinatorics = () => {
                     Analytics Pairs
                   </p>
                   <div className="w-full h-full mx-auto text-center border border-white bg-transparent shadow-lg" id="analytics-content">
-                    <ul className="mx-auto ">
+                    <ul className="mx-auto">
                       {analyticsData.map(([key, value]) => (
                         <li key={key} className="w-full border-b border-white last:border-none py-2">
                           <b className="">{key}</b> {' - '}{' '}<span className="italic">{value} pairs</span>
@@ -178,47 +157,24 @@ const Combinatorics = () => {
                   </div>
                 </div>
               </div>
-
             </div>
-            <div className="">
-              <div className="flex space-x-4 w-9/12 h-fit">
-                <div className="max-w-fit my-5 flex flex-col items-center">
-                  <label htmlFor="choose-n" className="text-sm font-light">
-                    Choose N:
-                  </label>
-                  <input
-                    id="choose-n"
-                    type="number"
-                    min="2"
-                    max="7"
-                    value={chooseN}
-                    onChange={(e) => setChooseN(parseInt(e.target.value))}
-                    className="p-1 mb-2 border rounded"
-                  />
+            <div className="w-9/12 h-fit">
+              <div className="max-w-fit my-5 flex flex-col items-center">
+                <label htmlFor="choose-n" className="text-sm font-light">
+                  Choose N:
+                </label>
+                <input
+                  id="choose-n"
+                  type="number"
+                  min="2"
+                  max="44"
+                  value={chooseN}
+                  onChange={(e) => setChooseN(parseInt(e.target.value))}
+                  className="p-1 mb-2 border rounded"
+                />
                   <button onClick={handleCalculateCombo} className="mx-auto bg-slate-700 text-white rounded px-2 py-1">
                     Calculate Choose Combo {chooseN}
                   </button>
-                </div>
-
-                <div className="max-w-fit my-5 flex flex-col items-center">
-                  <label style={{ visibility: "hidden" }} htmlFor="choose-n" className="text-sm font-light">
-                    Choose N:
-                  </label>
-                  <input style={{ visibility: "hidden" }}
-                    id="choose-n"
-                    type="number"
-                    min="2"
-                    max="7"
-                    value={chooseN}
-                    onChange={(e) => setChooseN(parseInt(e.target.value))}
-                    className="p-1 mb-2 border rounded"
-                  />
-                  <button onClick={() => handleRandomize()} className="mx-auto bg-gradient-to-tr focus:outline-1 outline-sky-300 from-violet-500 via-orange-400 to-blue-500 text-white rounded px-2 py-1">
-                    Randomize
-                  </button>
-                </div>
-
-
               </div>
               <table ref={tbl} className="w-full h-fit border border-black border-collapse text-center text-sm">
                 <thead>
@@ -274,4 +230,4 @@ const Combinatorics = () => {
   );
 };
 
-export default Combinatorics;
+export default MultiplicationCombinatorics;
