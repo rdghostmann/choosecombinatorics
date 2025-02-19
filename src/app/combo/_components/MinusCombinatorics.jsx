@@ -1,4 +1,4 @@
-// Combinatorics Component
+// @franklin sub
 "use client";
 import React, { useRef, useState } from 'react';
 
@@ -9,63 +9,74 @@ const MinusCombinatorics = () => {
   const [modResults, setModResults] = useState([]);
   const [userNumbers, setUserNumbers] = useState(Array(5).fill('')); // State for user input numbers
   const [chooseN, setChooseN] = useState(2); // State for "choose n"
-    const [factor, setFactor] = useState(2);
+  const [factor, setFactor] = useState(2);
+  const [resultArray, setresultArray] = useState([]);
 
-  // Function to calculate the "choose n" subtractions and return modulus 90
-  const calculateChooseN = (n) => {
-    const numbers = userNumbers.map(num => parseInt(num)).filter(num => !isNaN(num));
-    let results = [];
 
-    const combinations = (arr, n, start = 0, currentCombo = []) => {
-      if (currentCombo.length === n) {
-        const subtraction = currentCombo.reduce((acc, val) => acc - val, currentCombo[0] * 2);
-        results.push(((subtraction % 90) + 90) % 90); // Ensure non-negative modulus
-        return;
-      }
-      for (let i = start; i < arr.length; i++) {
-        combinations(arr, n, i + 1, [...currentCombo, arr[i]]);
-      }
-    };
-
-    combinations(numbers, n);
-    return results;
-  };
-
-  const calculateNChooseN = (n) => {
-    const numArray = userNumbers.map(num => parseInt(num)).filter(num => !isNaN(num));
-
-    if (numArray.length < factor) { // Ensure enough numbers are entered
-      alert(`Enter at least ${factor} valid numbers.`);
-      return [];
-    }
-
-    const resultArray = []; // Store computed mod results
-    let sum = numArray.slice(0, factor).reduce((acc, val) => acc - val, 0); // Sum first 'factor' elements
-
-    resultArray.push(sum > 90 ? sum % 90 : sum); // Apply modulo 90
-
-    for (let i = factor; i < numArray.length; i++) { // Iterate through remaining numbers
-      sum += numArray[i];
-      resultArray.push(sum > 90 ? sum % 90 : sum);
-    }
-
-    return resultArray;
-  };
-
-    // Handle calculation and store the mod results
-    const handleCalculateCombo = () => {
-      if (chooseN < 2 || chooseN > 44) {
-        alert("Choose n must be between 2 and 44");
-        return;
-      }
-      const results = calculateNChooseN(chooseN);
+  const getCombinations = (userNumbers, factor) => {
+    if (!Array.isArray(userNumbers) || userNumbers.length === 0 || !factor) return [];
   
-      setModResults(results);
-      setTimeout(() => {
-        handleResultCheck();
-      }, 2000);
-      confirm(`Choose ${chooseN} generated`);
-    };
+    const numArray = userNumbers.map(Number).filter(n => !isNaN(n) && n !== "");
+    let output = [];
+  
+    for (let start = 0; start <= numArray.length - factor; start++) {
+      let result = numArray[start] || 0; // Initialize with the first number
+      // Calculate the initial difference of the first 'factor' numbers
+      for (let j = 1; j < factor; j++) {
+        result -= numArray[start + j] || 0; // Ensure we're subtracting numbers
+      }
+      output.push(result);
+  
+      // Continue subtracting the next numbers
+      for (let k = start + factor; k < numArray.length; k++) {
+        result -= numArray[k] || 0; // Ensure we're subtracting numbers
+        output.push(result);
+      }
+    }
+  
+    return output; // Remove modulus operation to allow negative results
+  };
+  
+  
+  
+
+
+  // const numArray = userNumbers.map(Number).filter(n => !isNaN(n) && n !== "");
+
+
+  const calculateNChooseN = () => {
+    const numArray = userNumbers.map(Number).filter(n => !isNaN(n) && n !== "");
+    let finalOutput = [];
+  
+    for (let i = 0; i <= numArray.length - factor; i++) {
+      let sequence = getCombinations(numArray.slice(i), factor); // Restart at each position
+      finalOutput.push(...sequence);
+    }
+  
+    setresultArray(finalOutput);
+    return finalOutput;
+  };
+  
+  
+  
+
+
+
+  const handleCalculateCombo = () => {
+    if (factor < 2 || factor > 44) {
+      alert("Choose n must be between 2 and 44");
+      return;
+    }
+
+    const results = calculateNChooseN();
+    setModResults(results);
+
+    setTimeout(() => {
+      handleResultCheck();
+    }, 2000);
+
+    confirm(`Choose ${factor} generated`);
+  };
 
   // Handle ResultChecker
   const handleResultCheck = () => {
@@ -79,7 +90,7 @@ const MinusCombinatorics = () => {
       if (inputValue !== '') {
         for (let j = 0; j < tableCells.length; j++) {
           if (parseInt(tableCells[j].innerText) === parseInt(inputValue)) {
-            tableCells[j].classList.add('bg-reg-400', 'text-white');
+            tableCells[j].classList.add('bg-green-400', 'text-white');
 
             if (analytics[inputValue]) {
               analytics[inputValue] += 1;
@@ -92,6 +103,20 @@ const MinusCombinatorics = () => {
     }
     setInputValues(newInputValues);
     setAnalyticsData(Object.entries(analytics));
+  };
+
+  // Function to shuffle the userNumbers array
+  const handleRandomize = () => {
+    const shuffledNumbers = [...userNumbers]
+      .filter(num => num !== '') // Exclude empty inputs
+      .sort(() => Math.random() - 0.5); // Shuffle the array
+
+    // Fill empty inputs with blank strings after shuffling
+    while (shuffledNumbers.length < userNumbers.length) {
+      shuffledNumbers.push('');
+    }
+
+    setUserNumbers(shuffledNumbers); // Update state with shuffled numbers
   };
 
   return (
@@ -122,20 +147,22 @@ const MinusCombinatorics = () => {
                         onChange={(e) =>
                           setInputValues((prevState) => {
                             const newState = [...prevState];
-                            newState[index] = e.target.value;
+                            const value = parseInt(e.target.value, 10);
+                            newState[index] = isNaN(value) ? '' : value; // Ensure valid numbers
                             return newState;
                           })
                         }
                       />
                     ))}
+
                   </div>
                 </div>
                 <div className="flex flex-col items-stretch w-[45%] p-1" id="analytics">
-                  <p className="w-full  bg-slate-200 p-1 mb-1 text-center text-[10px] sm:text-xs">
+                  <p className="w-full bg-slate-200 p-1 mb-1 text-center text-[10px] sm:text-xs">
                     Analytics Pairs
                   </p>
                   <div className="w-full h-full mx-auto text-center border border-white bg-transparent shadow-lg" id="analytics-content">
-                    <ul className="mx-auto  ">
+                    <ul className="mx-auto ">
                       {analyticsData.map(([key, value]) => (
                         <li key={key} className="w-full border-b border-white last:border-none py-2">
                           <b className="">{key}</b> {' - '}{' '}<span className="italic">{value} pairs</span>
@@ -145,10 +172,9 @@ const MinusCombinatorics = () => {
                   </div>
                 </div>
               </div>
-
             </div>
             <div className="w-9/12 h-fit">
-            <div className="flex space-x-4 w-9/12 h-fit">
+              <div className="flex space-x-4 w-9/12 h-fit">
                 <div className="max-w-fit my-5 flex flex-col items-center">
                   <label htmlFor="choose-n" className="text-sm font-light">
                     Choose N:
@@ -184,53 +210,50 @@ const MinusCombinatorics = () => {
                     Randomize
                   </button>
                 </div>
-
-
               </div>
-            <table ref={tbl} className="w-full h-fit border border-black border-collapse text-center text-sm">
-              <thead>
-                {Array.from({ length: 3 }).map((_, rowIndex) => (
-                  <tr key={rowIndex} className="bg-gray-200">
-                    {Array.from({ length: 15 }).map((_, colIndex) => {
-                      const index = rowIndex * 15 + colIndex;
-                      return (
-                        <td key={index} className="border pb-3 border-black text-xs border-collapse">
-                          <div className="text-xs text-center mb-1">col{index + 1}</div>
-                          <input
-                            className="w-full mx-auto text-xs p-2 m-1 border rounded"
-                            type="number"
-                            min={1}
-                            max={90}
-                            value={userNumbers[index] || ''}
-                            onChange={(e) => {
-                              const newNumbers = [...userNumbers];
-                              newNumbers[index] = e.target.value;
-                              setUserNumbers(newNumbers);
-                            }}
-                          />
+              <table ref={tbl} className="w-full h-fit border border-black border-collapse text-center text-sm">
+                <thead>
+                  {Array.from({ length: 3 }).map((_, rowIndex) => (
+                    <tr key={rowIndex} className="bg-gray-200">
+                      {Array.from({ length: 15 }).map((_, colIndex) => {
+                        const index = rowIndex * 15 + colIndex;
+                        return (
+                          <td key={index} className="border pb-3 border-black text-xs border-collapse">
+                            <div className="text-xs text-center mb-1">col{index + 1}</div>
+                            <input
+                              className="w-full mx-auto text-xs p-2 m-1 border rounded"
+                              type="number"
+                              min={1}
+                              max={90}
+                              value={userNumbers[index] || ''}
+                              onChange={(e) => {
+                                const newNumbers = [...userNumbers];
+                                newNumbers[index] = e.target.value;
+                                setUserNumbers(newNumbers);
+                              }}
+                            />
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  ))}
+                </thead>
+                <tbody>
+                  {Array.from({ length: Math.ceil(modResults.length / 15) }).map((_, rowIndex) => (
+                    <tr key={rowIndex} className="border border-black border-collapse">
+                      {modResults.slice(rowIndex * 15, (rowIndex + 1) * 15).map((result, colIndex) => (
+                        <td key={colIndex} className="border border-black text-xs border-collapse bg-green-400 text-white">
+                          {result}
                         </td>
-                      );
-                    })}
-                  </tr>
-                ))}
-              </thead>
-              <tbody>
-                {Array.from({ length: Math.ceil(modResults.length / 15) }).map((_, rowIndex) => (
-                  <tr key={rowIndex} className="border border-black border-collapse">
-                    {modResults.slice(rowIndex * 15, (rowIndex + 1) * 15).map((result, colIndex) => (
-                      <td key={colIndex} className="border border-black text-xs border-collapse bg-green-400 text-white">
-                        {result}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
       </section>
-
       <section className="block sm:block md:hidden w-full h-screen">
         <div className="animate-bounce mx-auto mt-20 w-3/4">
           <p className="text-center text-xs">This is a Desktop Application</p>
@@ -240,5 +263,4 @@ const MinusCombinatorics = () => {
     </>
   );
 };
-
 export default MinusCombinatorics;

@@ -1,7 +1,6 @@
 {
+  "/not-found": "app/not-found.js",
   "/page": "app/page.js",
   "/choosetwo/page": "app/choosetwo/page.js",
-  "/combo/page": "app/combo/page.js",
-  "/randrum/page": "app/randrum/page.js",
-  "/permute/page": "app/permute/page.js"
+  "/combo/page": "app/combo/page.js"
 }

@@ -1,3 +1,4 @@
+//@franklin mul
 "use client";
 import React, { useRef, useState } from 'react';
 
@@ -8,76 +9,69 @@ const MultiplicationCombinatorics = () => {
   const [modResults, setModResults] = useState([]);
   const [userNumbers, setUserNumbers] = useState(Array(5).fill('')); // State for user input numbers
   const [chooseN, setChooseN] = useState(2); // State for "choose n"
-    const [factor, setFactor] = useState(2);
+  const [factor, setFactor] = useState(2);
+  const [resultArray, setresultArray] = useState([]);
 
-  // Function to calculate the "choose n" multiplications and return modulus 90
-  const calculateChooseN = (n) => {
-    const numbers = userNumbers.map(num => parseInt(num)).filter(num => !isNaN(num));
-    let results = [];
 
-    const combinations = (arr, n, start = 0, currentCombo = []) => {
-      if (currentCombo.length === n) {
-        const product = currentCombo.reduce((acc, val) => acc * val, 1);
-        results.push(product % 90);
-        return;
+  const getCombinations = (userNumbers, factor) => {
+    if (!Array.isArray(userNumbers) || userNumbers.length === 0 || !factor) return [];
+  
+    const numArray = userNumbers.map(Number).filter(n => !isNaN(n) && n !== "");
+    let output = [];
+  
+    for (let start = 0; start <= numArray.length - factor; start++) {
+      let product = 1;
+      // Calculate the initial product of the first 'factor' numbers
+      for (let j = 0; j < factor; j++) {
+        product *= numArray[start + j] || 1; // Ensure we're multiplying numbers
       }
-      for (let i = start; i < arr.length; i++) {
-        combinations(arr, n, i + 1, [...currentCombo, arr[i]]);
+      output.push(product);
+  
+      // Continue multiplying the next numbers
+      for (let k = start + factor; k < numArray.length; k++) {
+        product *= numArray[k] || 1; // Ensure we're multiplying numbers
+        output.push(product);
       }
-    };
-
-    combinations(numbers, n);
-    return results;
-  };
-
-  const calculateNChooseN = (n) => {
-    const numArray = userNumbers.map(num => parseInt(num)).filter(num => !isNaN(num));
-
-    if (numArray.length < factor) { // Ensure enough numbers are entered
-      alert(`Enter at least ${factor} valid numbers.`);
-      return [];
     }
-
-    const resultArray = []; // Store computed mod results
-    let sum = numArray.slice(0, factor).reduce((acc, val) => acc * val, 0); // Sum first 'factor' elements
-
-    resultArray.push(sum > 90 ? sum % 90 : sum); // Apply modulo 90
-
-    for (let i = factor; i < numArray.length; i++) { // Iterate through remaining numbers
-      sum += numArray[i];
-      resultArray.push(sum > 90 ? sum % 90 : sum);
-    }
-
-    return resultArray;
+  
+    return output.map(num => (num > 90 ? num % 90 : num)); // Apply modulus 90
   };
+  
 
-  // Handle calculation and store the mod results
-  const handleCalculate = () => {
-    if (chooseN < 2 || chooseN > 44) {
-      alert("Choose n must be between 2 and 44");
-      return;
+
+  // const numArray = userNumbers.map(Number).filter(n => !isNaN(n) && n !== "");
+
+
+  const calculateNChooseN = () => {
+    const numArray = userNumbers.map(Number).filter(n => !isNaN(n) && n !== "");
+    let finalOutput = [];
+  
+    for (let i = 0; i <= numArray.length - factor; i++) {
+      let sequence = getCombinations(numArray.slice(i), factor); // Restart at each position
+      finalOutput.push(...sequence);
     }
-    const results = calculateChooseN(chooseN);
-    setModResults(results);
-    setTimeout(() => {
-      handleResultCheck();
-    }, 2000);
-    confirm(`Multiplication Choose ${chooseN} generated`);
+  
+    setresultArray(finalOutput);
+    return finalOutput;
   };
+  
 
-  // Handle calculation and store the mod results
+
+
   const handleCalculateCombo = () => {
-    if (chooseN < 2 || chooseN > 44) {
+    if (factor < 2 || factor > 44) {
       alert("Choose n must be between 2 and 44");
       return;
     }
-    const results = calculateNChooseN(chooseN);
 
+    const results = calculateNChooseN();
     setModResults(results);
+
     setTimeout(() => {
       handleResultCheck();
     }, 2000);
-    confirm(`Choose ${chooseN} generated`);
+
+    confirm(`Choose ${factor} generated`);
   };
 
   // Handle ResultChecker
@@ -105,6 +99,20 @@ const MultiplicationCombinatorics = () => {
     }
     setInputValues(newInputValues);
     setAnalyticsData(Object.entries(analytics));
+  };
+
+  // Function to shuffle the userNumbers array
+  const handleRandomize = () => {
+    const shuffledNumbers = [...userNumbers]
+      .filter(num => num !== '') // Exclude empty inputs
+      .sort(() => Math.random() - 0.5); // Shuffle the array
+
+    // Fill empty inputs with blank strings after shuffling
+    while (shuffledNumbers.length < userNumbers.length) {
+      shuffledNumbers.push('');
+    }
+
+    setUserNumbers(shuffledNumbers); // Update state with shuffled numbers
   };
 
   return (
@@ -135,12 +143,14 @@ const MultiplicationCombinatorics = () => {
                         onChange={(e) =>
                           setInputValues((prevState) => {
                             const newState = [...prevState];
-                            newState[index] = e.target.value;
+                            const value = parseInt(e.target.value, 10);
+                            newState[index] = isNaN(value) ? '' : value; // Ensure valid numbers
                             return newState;
                           })
                         }
                       />
                     ))}
+
                   </div>
                 </div>
                 <div className="flex flex-col items-stretch w-[45%] p-1" id="analytics">
@@ -148,7 +158,7 @@ const MultiplicationCombinatorics = () => {
                     Analytics Pairs
                   </p>
                   <div className="w-full h-full mx-auto text-center border border-white bg-transparent shadow-lg" id="analytics-content">
-                    <ul className="mx-auto">
+                    <ul className="mx-auto ">
                       {analyticsData.map(([key, value]) => (
                         <li key={key} className="w-full border-b border-white last:border-none py-2">
                           <b className="">{key}</b> {' - '}{' '}<span className="italic">{value} pairs</span>
@@ -160,7 +170,7 @@ const MultiplicationCombinatorics = () => {
               </div>
             </div>
             <div className="w-9/12 h-fit">
-            <div className="flex space-x-4 w-9/12 h-fit">
+              <div className="flex space-x-4 w-9/12 h-fit">
                 <div className="max-w-fit my-5 flex flex-col items-center">
                   <label htmlFor="choose-n" className="text-sm font-light">
                     Choose N:
@@ -196,8 +206,6 @@ const MultiplicationCombinatorics = () => {
                     Randomize
                   </button>
                 </div>
-
-
               </div>
               <table ref={tbl} className="w-full h-fit border border-black border-collapse text-center text-sm">
                 <thead>
@@ -242,7 +250,6 @@ const MultiplicationCombinatorics = () => {
           </div>
         </div>
       </section>
-
       <section className="block sm:block md:hidden w-full h-screen">
         <div className="animate-bounce mx-auto mt-20 w-3/4">
           <p className="text-center text-xs">This is a Desktop Application</p>
@@ -252,5 +259,4 @@ const MultiplicationCombinatorics = () => {
     </>
   );
 };
-
 export default MultiplicationCombinatorics;
