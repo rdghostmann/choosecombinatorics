@@ -3,7 +3,7 @@
 "use client";
 import React, { useRef, useState } from 'react';
 
-const Combinatorics = () => {
+const Combo = () => {
   const tbl = useRef(null);
   const [inputValues, setInputValues] = useState(Array.from({ length: 90 }, (_, i) => i + 1));
   const [analyticsData, setAnalyticsData] = useState([]);
@@ -260,4 +260,4 @@ const Combinatorics = () => {
     </>
   );
 };
-export default Combinatorics;
+export default Combo;

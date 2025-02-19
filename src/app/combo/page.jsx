@@ -1,10 +1,10 @@
 import React from 'react'
-import Combo from './_component/Combo'
+import Combinatorics from '../components/combinatorics'
 
 const page = () => {
   return (
     <div>
-        <Combo />
+        <Combinatorics />
     </div>
   )
 }
