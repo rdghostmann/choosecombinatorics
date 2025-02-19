@@ -21,6 +21,16 @@
       "static/chunks/main-app.js",
       "static/chunks/app/choosetwo/layout.js"
     ],
+    "/combo/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/combo/layout.js"
+    ],
+    "/combo/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/combo/page.js"
+    ],
     "/permute/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -31,40 +41,15 @@
       "static/chunks/main-app.js",
       "static/chunks/app/permute/layout.js"
     ],
-    "/combo/page": [
+    "/randrum/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/combo/page.js"
+      "static/chunks/app/randrum/page.js"
     ],
-    "/combo/layout": [
+    "/randrum/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/combo/layout.js"
-    ],
-    "/combo/negativechoose/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/combo/negativechoose/page.js"
-    ],
-    "/combo/multiplychoose/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/combo/multiplychoose/page.js"
-    ],
-    "/combo/pairedchoose/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/combo/pairedchoose/page.js"
-    ],
-    "/combo/negativepair/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/combo/negativepair/page.js"
-    ],
-    "/not-found": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/not-found.js"
+      "static/chunks/app/randrum/layout.js"
     ]
   }
 }
