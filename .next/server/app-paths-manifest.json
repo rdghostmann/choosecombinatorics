@@ -1,6 +1,7 @@
 {
-  "/not-found": "app/not-found.js",
   "/page": "app/page.js",
   "/choosetwo/page": "app/choosetwo/page.js",
-  "/combo/page": "app/combo/page.js"
+  "/combo/page": "app/combo/page.js",
+  "/combo/multiplychoose/page": "app/combo/multiplychoose/page.js",
+  "/combo/negativechoose/page": "app/combo/negativechoose/page.js"
 }

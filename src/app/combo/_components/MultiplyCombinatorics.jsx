@@ -36,11 +36,7 @@ const MultiplicationCombinatorics = () => {
   
     return output.map(num => (num > 90 ? num % 90 : num)); // Apply modulus 90
   };
-  
-
-
-  // const numArray = userNumbers.map(Number).filter(n => !isNaN(n) && n !== "");
-
+    // const numArray = userNumbers.map(Number).filter(n => !isNaN(n) && n !== "");
 
   const calculateNChooseN = () => {
     const numArray = userNumbers.map(Number).filter(n => !isNaN(n) && n !== "");

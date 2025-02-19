@@ -8,65 +8,47 @@ const PairedCombinatorics = () => {
   const [modResults, setModResults] = useState([]);
   const [userNumbers, setUserNumbers] = useState(Array(5).fill('')); // State for user input numbers
   const [chooseN, setChooseN] = useState(2); // State for "choose n"
-    const [factor, setFactor] = useState(2);
+  const [factor, setFactor] = useState(2);
 
-  // Function to calculate the "choose n" sums and return modulus 90
-  const calculateChooseN = (n) => {
-    const numbers = userNumbers.map(num => parseInt(num)).filter(num => !isNaN(num));
-    let results = [];
+  const getCombinations = (userNumbers, factor) => {
+    if (!Array.isArray(userNumbers) || userNumbers.length === 0 || !factor) return [];
 
-    const combinations = (arr, n, start = 0, currentCombo = []) => {
-      if (currentCombo.length === n) {
-        const sum = currentCombo.reduce((acc, val) => acc + val, 0);
-        results.push(sum % 90);
-        return;
+    const numArray = userNumbers.map(Number).filter(n => !isNaN(n) && n !== "");
+    let output = [];
+
+    for (let start = 0; start <= numArray.length - factor; start++) {
+      let sum = 0;
+      // Calculate the initial sum of the first 'factor' numbers
+      for (let j = 0; j < factor; j++) {
+        sum += numArray[start + j] || 0; // Ensure we're adding numbers
       }
-      for (let i = start; i < arr.length; i++) {
-        combinations(arr, n, i + 1, [...currentCombo, arr[i]]);
-      }
-    };
+      output.push(sum);
 
-    combinations(numbers, n);
-    return results;
+      // Continue adding the next numbers to the sum
+      for (let k = start + factor; k < numArray.length; k++) {
+        sum += numArray[k] || 0; // Ensure we're adding numbers
+        output.push(sum);
+      }
+    }
+
+    return output.map(num => (num > 90 ? num % 90 : num)); // Apply modulus 90
   };
 
-  const calculateNChooseN = (n) => {
-    const numArray = userNumbers.map(num => parseInt(num)).filter(num => !isNaN(num));
 
-    if (numArray.length < factor) { // Ensure enough numbers are entered
-      alert(`Enter at least ${factor} valid numbers.`);
-      return [];
+    const calculateNChooseN = () => {
+    const numArray = userNumbers.map(Number).filter(n => !isNaN(n) && n !== "");
+    let resultArray = [];
+
+    for (let i = 0; i <= numArray.length - factor; i++) {
+      let sequence = getCombinations(numArray.slice(i), factor); // Restart at each position
+      resultArray.push(...sequence);
     }
 
-    const resultArray = []; // Store computed mod results
-    let sum = numArray.slice(0, factor).reduce((acc, val) => acc + val, 0); // Sum first 'factor' elements
-
-    resultArray.push(sum > 90 ? sum % 90 : sum); // Apply modulo 90
-
-    for (let i = factor; i < numArray.length; i++) { // Iterate through remaining numbers
-      sum += numArray[i];
-      resultArray.push(sum > 90 ? sum % 90 : sum);
-    }
-
+    setresultArray(resultArray);
     return resultArray;
   };
-
-
-  // Handle calculation and store the mod results
-  const handleCalculate = () => {
-    if (chooseN < 2 || chooseN > 44) {
-      alert("Choose n must be between 2 and 44");
-      return;
-    }
-    const results = calculateChooseN(chooseN);
-    setModResults(results);
-    setTimeout(() => {
-      handleResultCheck();
-    }, 2000);
-    confirm(`Choose ${chooseN} generated`);
-  };
-
   
+
   // Handle calculation and store the mod results
   const handleCalculateCombo = () => {
     if (factor < 2 || factor > 44) {
@@ -174,7 +156,7 @@ const PairedCombinatorics = () => {
               </section>
             </div>
             <div className="w-9/12 h-fit">
-            <div className="flex space-x-4 w-9/12 h-fit">
+              <div className="flex space-x-4 w-9/12 h-fit">
                 <div className="max-w-fit my-5 flex flex-col items-center">
                   <label htmlFor="choose-n" className="text-sm font-light">
                     Choose N:

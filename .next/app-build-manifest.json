@@ -31,10 +31,25 @@
       "static/chunks/main-app.js",
       "static/chunks/app/combo/page.js"
     ],
-    "/not-found": [
+    "/combo/negativechoose/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/not-found.js"
+      "static/chunks/app/combo/negativechoose/page.js"
+    ],
+    "/combo/multiplychoose/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/combo/multiplychoose/page.js"
+    ],
+    "/combo/pairedchoose/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/combo/pairedchoose/page.js"
+    ],
+    "/combo/productpair/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/combo/productpair/page.js"
     ]
   }
 }
