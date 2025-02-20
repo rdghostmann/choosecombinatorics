@@ -1,6 +1,6 @@
 "use client";
 import React, { useRef, useState } from 'react';
-import targetPairs from '../../../lib/targetPair';
+import targetPairs from '../../lib/targetPair';
 
 
 const ProductPaired = () => {
@@ -9,63 +9,40 @@ const ProductPaired = () => {
   const [modResults, setModResults] = useState([]);
   const [userNumbers, setUserNumbers] = useState(Array(5).fill('')); // State for user input numbers
   const [chooseN, setChooseN] = useState(2); // State for "choose n"
-    const [factor, setFactor] = useState(2);
 
-    const getCombinations = (userNumbers, factor) => {
-      if (!Array.isArray(userNumbers) || userNumbers.length === 0 || !factor) return [];
-    
-      const numArray = userNumbers.map(Number).filter(n => !isNaN(n) && n !== "");
-      let output = [];
-    
-      for (let start = 0; start <= numArray.length - factor; start++) {
-        let product = 1;
-        // Calculate the initial product of the first 'factor' numbers
-        for (let j = 0; j < factor; j++) {
-          product *= numArray[start + j] || 1; // Ensure we're multiplying numbers
-        }
-        output.push(product);
-    
-        // Continue multiplying the next numbers
-        for (let k = start + factor; k < numArray.length; k++) {
-          product *= numArray[k] || 1; // Ensure we're multiplying numbers
-          output.push(product);
-        }
+  // Function to calculate the "choose n" multiplications and return modulus 90
+  const calculateChooseN = (n) => {
+    const numbers = userNumbers.map(num => parseInt(num)).filter(num => !isNaN(num));
+    let results = [];
+
+    const combinations = (arr, n, start = 0, currentCombo = []) => {
+      if (currentCombo.length === n) {
+        const product = currentCombo.reduce((acc, val) => acc * val, 1);
+        results.push(product % 90);
+        return;
       }
-    
-      return output.map(num => (num > 90 ? num % 90 : num)); // Apply modulus 90
-    };
-    
-  
-    // const numArray = userNumbers.map(Number).filter(n => !isNaN(n) && n !== "");
-  
-    const calculateNChooseN = () => {
-      const numArray = userNumbers.map(Number).filter(n => !isNaN(n) && n !== "");
-      let finalOutput = [];
-    
-      for (let i = 0; i <= numArray.length - factor; i++) {
-        let sequence = getCombinations(numArray.slice(i), factor); // Restart at each position
-        finalOutput.push(...sequence);
+      for (let i = start; i < arr.length; i++) {
+        combinations(arr, n, i + 1, [...currentCombo, arr[i]]);
       }
-    
-      setresultArray(finalOutput);
-      return finalOutput;
     };
-    
-    // Handle calculation and store the mod results
-    const handleCalculateCombo = () => {
-     if (factor < 2 || factor > 44) {
+
+    combinations(numbers, n);
+    return results;
+  };
+
+  // Handle calculation and store the mod results
+  const handleCalculate = () => {
+    if (chooseN < 2 || chooseN > 44) {
       alert("Choose n must be between 2 and 44");
       return;
     }
-    const results = calculateNChooseN(factor);
-
+    const results = calculateChooseN(chooseN);
     setModResults(results);
     setTimeout(() => {
       handleResultCheck();
     }, 2000);
-    confirm(`Choose ${factor} generated`);
-    };
-  
+    confirm(`Choose ${chooseN} generated`);
+  };
 
   const handleResultCheck = () => {
     const tableCells = tbl?.current.querySelectorAll('td');
@@ -156,49 +133,31 @@ const ProductPaired = () => {
               </section>
             </div>
             <div className="w-9/12 h-fit">
-            <div className="flex space-x-4 w-9/12 h-fit">
-                <div className="max-w-fit my-5 flex flex-col items-center">
-                  <label htmlFor="choose-n" className="text-sm font-light">
-                    Choose N:
-                  </label>
-                  <input
-                    id="choose-n"
-                    type="number"
-                    min="2"
-                    max="7"
-                    value={factor}
-                    onChange={(e) => setFactor(parseInt(e.target.value))}
-                    className="p-1 mb-2 border rounded"
-                  />
-                  <button onClick={handleCalculateCombo} className="mx-auto bg-slate-700 text-white rounded px-2 py-1">
-                    Calculate Choose Combo {factor}
+              <div className="max-w-fit my-5 flex flex-col items-center">
+                <label htmlFor="choose-n" className="text-sm font-light">
+                  Choose N:
+                </label>
+                <input
+                  id="choose-n"
+                  type="number"
+                  min="2"
+                  max="7"
+                  value={chooseN}
+                  onChange={(e) => setChooseN(parseInt(e.target.value))}
+                  className="p-1 mb-2 border rounded"
+                />
+                <button onClick={handleCalculate} className="mx-auto bg-slate-700 text-white rounded px-2 py-1">
+                  Calculate Choose {chooseN}
+                </button>
+                <div className="flex justify-center my-4">
+                  <button
+                    className="bg-gradient-to-tr focus:outline-1 outline-sky-300 from-violet-500 via-orange-400 to-blue-500 text-white px-4 py-2 rounded"
+                    onClick={() => handleRandomize()}
+                  >
+                    Randomize 
                   </button>
                 </div>
-
-                <div className="max-w-fit my-5 flex flex-col items-center">
-                  <label style={{ visibility: "hidden" }} htmlFor="choose-n" className="text-sm font-light">
-                    Choose N:
-                  </label>
-                  <input style={{ visibility: "hidden" }}
-                    id="choose-n"
-                    type="number"
-                    min="2"
-                    max="7"
-                    value={chooseN}
-                    onChange={(e) => setChooseN(parseInt(e.target.value))}
-                    className="p-1 mb-2 border rounded"
-                  />
-                  <button onClick={() => handleRandomize()} className="mx-auto bg-gradient-to-tr focus:outline-1 outline-sky-300 from-violet-500 via-orange-400 to-blue-500 text-white rounded px-2 py-1">
-                    Randomize
-                  </button>
-                </div>
-
-
               </div>
-
-
-
-
               <table  className="w-full h-fit border border-black border-collapse text-center text-sm">
                 <thead>
                   {Array.from({ length: 3 }).map((_, rowIndex) => (

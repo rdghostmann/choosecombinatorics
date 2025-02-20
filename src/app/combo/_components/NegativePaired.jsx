@@ -1,6 +1,6 @@
 "use client";
 import React, { useRef, useState } from 'react';
-import targetPairs from '../../../lib/targetPair';
+import targetPairs from '../../lib/targetPair';
 
 
 const NegativePaired = () => {
@@ -8,56 +8,36 @@ const NegativePaired = () => {
   const [analyticsData, setAnalyticsData] = useState([]);
   const [modResults, setModResults] = useState([]);
   const [userNumbers, setUserNumbers] = useState(Array(5).fill('')); // State for user input numbers
-  const [chooseN, setChooseN] = useState(12); // State for "choose n"
-  const [factor, setFactor] = useState(2);
+  const [chooseN, setChooseN] = useState(2); // State for "choose n"
 
-  const getCombinations = (userNumbers, factor) => {
-    if (!Array.isArray(userNumbers) || userNumbers.length === 0 || !factor) return [];
-  
-    const numArray = userNumbers.map(Number).filter(n => !isNaN(n) && n !== "");
-    let output = [];
-  
-    for (let start = 0; start <= numArray.length - factor; start++) {
-      let result = numArray[start] || 0; // Initialize with the first number
-      // Calculate the initial difference of the first 'factor' numbers
-      for (let j = 1; j < factor; j++) {
-        result -= numArray[start + j] || 0; // Ensure we're subtracting numbers
-      }
-      output.push(result);
-  
-      // Continue subtracting the next numbers
-      for (let k = start + factor; k < numArray.length; k++) {
-        result -= numArray[k] || 0; // Ensure we're subtracting numbers
-        output.push(result);
-      }
-    }
-  
-    return output; // Remove modulus operation to allow negative results
-  };
-  
-    // const numArray = userNumbers.map(Number).filter(n => !isNaN(n) && n !== "");
+  // Function to calculate the "choose n" sums and return modulus 90
+  const calculateChooseN = (n) => {
+    const numbers = userNumbers.map(num => parseInt(num)).filter(num => !isNaN(num));
+    let results = [];
 
-  const calculateNChooseN = () => {
-    const numArray = userNumbers.map(Number).filter(n => !isNaN(n) && n !== "");
-    let finalOutput = [];
-  
-    for (let i = 0; i <= numArray.length - factor; i++) {
-      let sequence = getCombinations(numArray.slice(i), factor); // Restart at each position
-      finalOutput.push(...sequence);
-    }
-  
-    setresultArray(finalOutput);
-    return finalOutput;
+    const combinations = (arr, n, start = 0, currentCombo = []) => {
+      if (currentCombo.length === n) {
+        const subtraction = currentCombo.reduce((acc, val) => acc - val, currentCombo[0] * 2);
+        results.push(((subtraction % 90) + 90) % 90); // Ensure non-negative modulus
+        return;
+      }
+      for (let i = start; i < arr.length; i++) {
+        combinations(arr, n, i + 1, [...currentCombo, arr[i]]);
+      }
+    };
+
+
+    combinations(numbers, n);
+    return results;
   };
-  
+
   // Handle calculation and store the mod results
-  const handleCalculateCombo = () => {
+  const handleCalculate = () => {
     if (chooseN < 2 || chooseN > 44) {
       alert("Choose n must be between 2 and 44");
       return;
     }
-    const results = calculateNChooseN(chooseN);
-
+    const results = calculateChooseN(chooseN);
     setModResults(results);
     setTimeout(() => {
       handleResultCheck();
@@ -65,12 +45,11 @@ const NegativePaired = () => {
     confirm(`Choose ${chooseN} generated`);
   };
 
-
   const handleResultCheck = () => {
     const tableCells = tbl?.current.querySelectorAll('td');
     const analytics = {};
 
-
+  
     // Clear previous highlights
     tableCells.forEach(cell => cell.classList.remove('bg-purple-500', 'text-white'));
 
@@ -112,19 +91,19 @@ const NegativePaired = () => {
     setAnalyticsData(highlightedData.length > 0 ? highlightedData : [["No pairs found"]]);
   };
 
-  // Function to shuffle the userNumbers array
-  const handleRandomize = () => {
-    const shuffledNumbers = [...userNumbers]
-      .filter(num => num !== '') // Exclude empty inputs
-      .sort(() => Math.random() - 0.5); // Shuffle the array
-
-    // Fill empty inputs with blank strings after shuffling
-    while (shuffledNumbers.length < userNumbers.length) {
-      shuffledNumbers.push('');
-    }
-
-    setUserNumbers(shuffledNumbers); // Update state with shuffled numbers
-  };
+    // Function to shuffle the userNumbers array
+    const handleRandomize = () => {
+      const shuffledNumbers = [...userNumbers]
+        .filter(num => num !== '') // Exclude empty inputs
+        .sort(() => Math.random() - 0.5); // Shuffle the array
+  
+      // Fill empty inputs with blank strings after shuffling
+      while (shuffledNumbers.length < userNumbers.length) {
+        shuffledNumbers.push('');
+      }
+  
+      setUserNumbers(shuffledNumbers); // Update state with shuffled numbers
+    };
 
   return (
     <>
@@ -168,15 +147,15 @@ const NegativePaired = () => {
                   onChange={(e) => setChooseN(parseInt(e.target.value))}
                   className="p-1 mb-2 border rounded"
                 />
-                <button onClick={handleCalculateCombo} className="mx-auto bg-slate-700 text-white rounded px-2 py-1">
-                  Calculate Choose Combo {chooseN}
+                <button onClick={handleCalculate} className="mx-auto bg-slate-700 text-white rounded px-2 py-1">
+                  Calculate Choose {chooseN}
                 </button>
                 <div className="flex justify-center my-4">
                   <button
                     className="bg-gradient-to-tr focus:outline-1 outline-sky-300 from-violet-500 via-orange-400 to-blue-500 text-white px-4 py-2 rounded"
                     onClick={() => handleRandomize()}
                   >
-                    Randomize
+                    Randomize 
                   </button>
                 </div>
               </div>
