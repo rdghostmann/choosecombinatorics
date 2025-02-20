@@ -39,8 +39,6 @@ const Combo = () => {
   };
 
   // const numArray = userNumbers.map(Number).filter(n => !isNaN(n) && n !== "");
-
-
   const calculateNChooseN = () => {
     const numArray = userNumbers.map(Number).filter(n => !isNaN(n) && n !== "");
     let finalOutput = [];
@@ -53,11 +51,7 @@ const Combo = () => {
     setresultArray(finalOutput);
     return finalOutput;
   };
-  
-  
-  
-
-
+   
 
   const handleCalculateCombo = () => {
     if (factor < 2 || factor > 44) {

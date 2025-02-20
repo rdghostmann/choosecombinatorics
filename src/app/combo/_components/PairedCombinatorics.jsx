@@ -10,6 +10,7 @@ const PairedCombinatorics = () => {
   const [chooseN, setChooseN] = useState(2); // State for "choose n"
   const [factor, setFactor] = useState(2);
 
+
   const getCombinations = (userNumbers, factor) => {
     if (!Array.isArray(userNumbers) || userNumbers.length === 0 || !factor) return [];
 
@@ -34,21 +35,20 @@ const PairedCombinatorics = () => {
     return output.map(num => (num > 90 ? num % 90 : num)); // Apply modulus 90
   };
 
-
-    const calculateNChooseN = () => {
+  // const numArray = userNumbers.map(Number).filter(n => !isNaN(n) && n !== "");
+  const calculateNChooseN = () => {
     const numArray = userNumbers.map(Number).filter(n => !isNaN(n) && n !== "");
-    let resultArray = [];
+    let finalOutput = [];
 
     for (let i = 0; i <= numArray.length - factor; i++) {
       let sequence = getCombinations(numArray.slice(i), factor); // Restart at each position
-      resultArray.push(...sequence);
+      finalOutput.push(...sequence);
     }
 
-    setresultArray(resultArray);
-    return resultArray;
+    setresultArray(finalOutput);
+    return finalOutput;
   };
-  
-
+   
   // Handle calculation and store the mod results
   const handleCalculateCombo = () => {
     if (factor < 2 || factor > 44) {

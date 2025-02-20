@@ -10,63 +10,46 @@ const NegativePaired = () => {
   const [userNumbers, setUserNumbers] = useState(Array(5).fill('')); // State for user input numbers
   const [chooseN, setChooseN] = useState(12); // State for "choose n"
   const [factor, setFactor] = useState(2);
-  // Function to calculate the "choose n" sums and return modulus 90
-  const calculateChooseN = (n) => {
-    const numbers = userNumbers.map(num => parseInt(num)).filter(num => !isNaN(num));
-    let results = [];
 
-    const combinations = (arr, n, start = 0, currentCombo = []) => {
-      if (currentCombo.length === n) {
-        const subtraction = currentCombo.reduce((acc, val) => acc - val, currentCombo[0] * 2);
-        results.push(((subtraction % 90) + 90) % 90); // Ensure non-negative modulus
-        return;
+  const getCombinations = (userNumbers, factor) => {
+    if (!Array.isArray(userNumbers) || userNumbers.length === 0 || !factor) return [];
+  
+    const numArray = userNumbers.map(Number).filter(n => !isNaN(n) && n !== "");
+    let output = [];
+  
+    for (let start = 0; start <= numArray.length - factor; start++) {
+      let result = numArray[start] || 0; // Initialize with the first number
+      // Calculate the initial difference of the first 'factor' numbers
+      for (let j = 1; j < factor; j++) {
+        result -= numArray[start + j] || 0; // Ensure we're subtracting numbers
       }
-      for (let i = start; i < arr.length; i++) {
-        combinations(arr, n, i + 1, [...currentCombo, arr[i]]);
+      output.push(result);
+  
+      // Continue subtracting the next numbers
+      for (let k = start + factor; k < numArray.length; k++) {
+        result -= numArray[k] || 0; // Ensure we're subtracting numbers
+        output.push(result);
       }
-    };
-
-
-    combinations(numbers, n);
-    return results;
-  };
-
-
-  const calculateNChooseN = (n) => {
-    const numArray = userNumbers.map(num => parseInt(num)).filter(num => !isNaN(num));
-
-    if (numArray.length < factor) { // Ensure enough numbers are entered
-      alert(`Enter at least ${factor} valid numbers.`);
-      return [];
     }
-
-    const resultArray = []; // Store computed mod results
-    let sum = numArray.slice(0, factor).reduce((acc, val) => acc - val, 0); // Sum first 'factor' elements
-
-    resultArray.push(sum > 90 ? sum % 90 : sum); // Apply modulo 90
-
-    for (let i = factor; i < numArray.length; i++) { // Iterate through remaining numbers
-      sum += numArray[i];
-      resultArray.push(sum > 90 ? sum % 90 : sum);
-    }
-
-    return resultArray;
+  
+    return output; // Remove modulus operation to allow negative results
   };
+  
+    // const numArray = userNumbers.map(Number).filter(n => !isNaN(n) && n !== "");
 
-  // Handle calculation and store the mod results
-  const handleCalculate = () => {
-    if (chooseN < 2 || chooseN > 44) {
-      alert("Choose n must be between 2 and 44");
-      return;
+  const calculateNChooseN = () => {
+    const numArray = userNumbers.map(Number).filter(n => !isNaN(n) && n !== "");
+    let finalOutput = [];
+  
+    for (let i = 0; i <= numArray.length - factor; i++) {
+      let sequence = getCombinations(numArray.slice(i), factor); // Restart at each position
+      finalOutput.push(...sequence);
     }
-    const results = calculateChooseN(chooseN);
-    setModResults(results);
-    setTimeout(() => {
-      handleResultCheck();
-    }, 2000);
-    confirm(`Choose ${chooseN} generated`);
+  
+    setresultArray(finalOutput);
+    return finalOutput;
   };
-
+  
   // Handle calculation and store the mod results
   const handleCalculateCombo = () => {
     if (chooseN < 2 || chooseN > 44) {
