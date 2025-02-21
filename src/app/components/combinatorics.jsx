@@ -10,11 +10,9 @@ const Combinatorics = () => {
   const [userNumbers, setUserNumbers] = useState(Array(5).fill('')); // State for user input numbers
   const [chooseN, setChooseN] = useState(2); // State for "choose n"
 
-  // lFunction to calculate the "choose n" sums and return moduus 90
+  // Function to calculate the "choose n" sums and return modulus 90
   const calculateChooseN = (n) => {
     const numbers = userNumbers.map(num => parseInt(num)).filter(num => !isNaN(num));
-   
-   
     let results = [];
 
     const combinations = (arr, n, start = 0, currentCombo = []) => {
@@ -23,6 +21,7 @@ const Combinatorics = () => {
         results.push(sum % 90);
         return;
       }
+
       for (let i = start; i < arr.length; i++) {
         combinations(arr, n, i + 1, [...currentCombo, arr[i]]);
       }
@@ -45,7 +44,6 @@ const Combinatorics = () => {
     }, 2000);
     confirm(`Choose ${chooseN} generated`);
   };
-
 
   // Handle ResultChecker
   const handleResultCheck = () => {
@@ -72,6 +70,20 @@ const Combinatorics = () => {
     }
     setInputValues(newInputValues);
     setAnalyticsData(Object.entries(analytics));
+  };
+
+  // Function to shuffle the userNumbers array
+  const handleRandomize = () => {
+    const shuffledNumbers = [...userNumbers]
+      .filter(num => num !== '') // Exclude empty inputs
+      .sort(() => Math.random() - 0.5); // Shuffle the array
+
+    // Fill empty inputs with blank strings after shuffling
+    while (shuffledNumbers.length < userNumbers.length) {
+      shuffledNumbers.push('');
+    }
+
+    setUserNumbers(shuffledNumbers); // Update state with shuffled numbers
   };
 
   return (
@@ -125,70 +137,87 @@ const Combinatorics = () => {
                   </div>
                 </div>
               </div>
-
             </div>
             <div className="w-9/12 h-fit">
-            <div className="max-w-fit my-5 flex flex-col items-center">
-              <label htmlFor="choose-n" className="text-sm font-light">
-                Choose N:
-              </label>
-              <input
-                id="choose-n"
-                type="number"
-                min="2"
-                max="7"
-                value={chooseN}
-                onChange={(e) => setChooseN(parseInt(e.target.value))}
-                className="p-1 mb-2 border rounded"
-              />
-              <button onClick={handleCalculate} className="mx-auto bg-slate-700 text-white rounded px-2 py-1">
-                Calculate Choose {chooseN}
-              </button>
-            </div>
-            <table ref={tbl} className="w-full h-fit border border-black border-collapse text-center text-sm">
-              <thead>
-                {Array.from({ length: 3 }).map((_, rowIndex) => (
-                  <tr key={rowIndex} className="bg-gray-200">
-                    {Array.from({ length: 15 }).map((_, colIndex) => {
-                      const index = rowIndex * 15 + colIndex;
-                      return (
-                        <td key={index} className="border pb-3 border-black text-xs border-collapse">
-                          <div className="text-xs text-center mb-1">col{index + 1}</div>
-                          <input
-                            className="w-full mx-auto text-xs p-2 m-1 border rounded"
-                            type="number"
-                            min={1}
-                            max={90}
-                            value={userNumbers[index] || ''}
-                            onChange={(e) => {
-                              const newNumbers = [...userNumbers];
-                              newNumbers[index] = e.target.value;
-                              setUserNumbers(newNumbers);
-                            }}
-                          />
+              <div className="flex space-x-4 w-9/12 h-fit">
+                <div className="max-w-fit my-5 flex flex-col items-center">
+                  <label htmlFor="choose-n" className="text-sm font-light">
+                    Choose N:
+                  </label>
+                  <input
+                    id="choose-n"
+                    type="number"
+                    min="2"
+                    max="7"
+                    value={chooseN}
+                    onChange={(e) => setChooseN(parseInt(e.target.value))}
+                    className="p-1 mb-2 border rounded"
+                  />
+                  <button onClick={handleCalculate} className="mx-auto bg-slate-700 text-white rounded px-2 py-1">
+                    Calculate Choose {chooseN}
+                  </button>
+                </div>
+                <div className="max-w-fit my-5 flex flex-col items-center">
+                  <label style={{ visibility: "hidden" }} htmlFor="choose-n" className="text-sm font-light">
+                    Choose N:
+                  </label>
+                  <input style={{ visibility: "hidden" }}
+                    id="choose-n"
+                    type="number"
+                    min="2"
+                    max="7"
+                    value={chooseN}
+                    onChange={(e) => setChooseN(parseInt(e.target.value))}
+                    className="p-1 mb-2 border rounded"
+                  />
+                  <button onClick={handleRandomize} className="mx-auto bg-gradient-to-tr focus:outline-1 outline-sky-300 from-violet-500 via-orange-400 to-blue-500 text-white rounded px-2 py-1">
+                    Randomize
+                  </button>
+                </div>
+              </div>
+              <table ref={tbl} className="w-full h-fit border border-black border-collapse text-center text-sm">
+                <thead>
+                  {Array.from({ length: 3 }).map((_, rowIndex) => (
+                    <tr key={rowIndex} className="bg-gray-200">
+                      {Array.from({ length: 15 }).map((_, colIndex) => {
+                        const index = rowIndex * 15 + colIndex;
+                        return (
+                          <td key={index} className="border pb-3 border-black text-xs border-collapse">
+                            <div className="text-xs text-center mb-1">col{index + 1}</div>
+                            <input
+                              className="w-full mx-auto text-xs p-2 m-1 border rounded"
+                              type="number"
+                              min={1}
+                              max={90}
+                              value={userNumbers[index] || ''}
+                              onChange={(e) => {
+                                const newNumbers = [...userNumbers];
+                                newNumbers[index] = e.target.value;
+                                setUserNumbers(newNumbers);
+                              }}
+                            />
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  ))}
+                </thead>
+                <tbody>
+                  {Array.from({ length: Math.ceil(modResults.length / 15) }).map((_, rowIndex) => (
+                    <tr key={rowIndex} className="border border-black border-collapse">
+                      {modResults.slice(rowIndex * 15, (rowIndex + 1) * 15).map((result, colIndex) => (
+                        <td key={colIndex} className="border border-black text-xs border-collapse bg-green-400 text-white">
+                          {result}
                         </td>
-                      );
-                    })}
-                  </tr>
-                ))}
-              </thead>
-              <tbody>
-                {Array.from({ length: Math.ceil(modResults.length / 15) }).map((_, rowIndex) => (
-                  <tr key={rowIndex} className="border border-black border-collapse">
-                    {modResults.slice(rowIndex * 15, (rowIndex + 1) * 15).map((result, colIndex) => (
-                      <td key={colIndex} className="border border-black text-xs border-collapse bg-green-400 text-white">
-                        {result}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
       </section>
-
       <section className="block sm:block md:hidden w-full h-screen">
         <div className="animate-bounce mx-auto mt-20 w-3/4">
           <p className="text-center text-xs">This is a Desktop Application</p>

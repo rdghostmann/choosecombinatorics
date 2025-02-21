@@ -8,51 +8,30 @@ const MinusCombinatorics = () => {
   const [analyticsData, setAnalyticsData] = useState([]);
   const [modResults, setModResults] = useState([]);
   const [userNumbers, setUserNumbers] = useState(Array(5).fill('')); // State for user input numbers
-  const [chooseN, setChooseN] = useState(2); // State for "choose n"
   const [factor, setFactor] = useState(2);
-  const [resultArray, setresultArray] = useState([]);
 
+  const calculateNChooseN = (n) => {
+    const numbers = userNumbers.map(num => parseInt(num)).filter(num => !isNaN(num));
+    let results = [];
 
-  const getCombinations = (userNumbers, factor) => {
-    if (!Array.isArray(userNumbers) || userNumbers.length === 0 || !factor) return [];
-  
-    const numArray = userNumbers.map(Number).filter(n => !isNaN(n) && n !== "");
-    let output = [];
-  
-    for (let start = 0; start <= numArray.length - factor; start++) {
-      let result = numArray[start] || 0; // Initialize with the first number
-      // Calculate the initial difference of the first 'factor' numbers
-      for (let j = 1; j < factor; j++) {
-        result -= numArray[start + j] || 0; // Ensure we're subtracting numbers
+    const getCombinations = (arr) => {
+      if (arr.length < 2) return;
+
+      for (let i = 0; i < arr.length - 1; i++) {
+        let diff = arr[i] - arr[i + 1];
+        results.push((diff % 90 + 90) % 90); // Ensure non-negative result
+
+        for (let j = i + 2; j < arr.length; j++) {
+          diff -= arr[j];
+          results.push((diff % 90 + 90) % 90); // Ensure non-negative result
+        }
       }
-      output.push(result);
-  
-      // Continue subtracting the next numbers
-      for (let k = start + factor; k < numArray.length; k++) {
-        result -= numArray[k] || 0; // Ensure we're subtracting numbers
-        output.push(result);
-      }
-    }
-  
-    return output; // Remove modulus operation to allow negative results
-  };
-  
-  // const numArray = userNumbers.map(Number).filter(n => !isNaN(n) && n !== "");
+    };
 
-  const calculateNChooseN = () => {
-    const numArray = userNumbers.map(Number).filter(n => !isNaN(n) && n !== "");
-    let finalOutput = [];
-  
-    for (let i = 0; i <= numArray.length - factor; i++) {
-      let sequence = getCombinations(numArray.slice(i), factor); // Restart at each position
-      finalOutput.push(...sequence);
-    }
-  
-    setresultArray(finalOutput);
-    return finalOutput;
+    getCombinations(numbers, n);
+
+    return results;
   };
-  
-  
 
   const handleCalculateCombo = () => {
     if (factor < 2 || factor > 44) {
@@ -60,7 +39,7 @@ const MinusCombinatorics = () => {
       return;
     }
 
-    const results = calculateNChooseN();
+    const results = calculateNChooseN(factor);
     setModResults(results);
 
     setTimeout(() => {
@@ -194,8 +173,8 @@ const MinusCombinatorics = () => {
                     type="number"
                     min="2"
                     max="7"
-                    value={chooseN}
-                    onChange={(e) => setChooseN(parseInt(e.target.value))}
+                    value={factor}
+                    onChange={(e) => setFactor(parseInt(e.target.value))}
                     className="p-1 mb-2 border rounded"
                   />
                   <button onClick={() => handleRandomize()} className="mx-auto bg-gradient-to-tr focus:outline-1 outline-sky-300 from-violet-500 via-orange-400 to-blue-500 text-white rounded px-2 py-1">

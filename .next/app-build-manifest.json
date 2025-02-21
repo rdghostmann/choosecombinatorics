@@ -11,6 +11,46 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
+    "/combo/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/combo/page.js"
+    ],
+    "/combo/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/combo/layout.js"
+    ],
+    "/combo/pairedchoose/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/combo/pairedchoose/page.js"
+    ],
+    "/combo/negativepair/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/combo/negativepair/page.js"
+    ],
+    "/sequenceViewN9uYVzKXC7QfDqwMkvHwIRTG&modettsequenceMNGN9uYVzKXC7QfDqwMkvHwIRTG&mode/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/sequenceViewN9uYVzKXC7QfDqwMkvHwIRTG&modettsequenceMNGN9uYVzKXC7QfDqwMkvHwIRTG&mode/page.js"
+    ],
+    "/combo/productpair/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/combo/productpair/page.js"
+    ],
+    "/permute/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/permute/page.js"
+    ],
+    "/permute/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/permute/layout.js"
+    ],
     "/choosetwo/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -21,15 +61,15 @@
       "static/chunks/main-app.js",
       "static/chunks/app/choosetwo/layout.js"
     ],
-    "/combo/layout": [
+    "/randrum/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/combo/layout.js"
+      "static/chunks/app/randrum/page.js"
     ],
-    "/combo/page": [
+    "/randrum/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/combo/page.js"
+      "static/chunks/app/randrum/layout.js"
     ],
     "/combo/negativechoose/page": [
       "static/chunks/webpack.js",
@@ -41,15 +81,10 @@
       "static/chunks/main-app.js",
       "static/chunks/app/combo/multiplychoose/page.js"
     ],
-    "/combo/pairedchoose/page": [
+    "/not-found": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/combo/pairedchoose/page.js"
-    ],
-    "/combo/productpair/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/combo/productpair/page.js"
+      "static/chunks/app/not-found.js"
     ]
   }
 }

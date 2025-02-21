@@ -8,52 +8,30 @@ const MultiplicationCombinatorics = () => {
   const [analyticsData, setAnalyticsData] = useState([]);
   const [modResults, setModResults] = useState([]);
   const [userNumbers, setUserNumbers] = useState(Array(5).fill('')); // State for user input numbers
-  const [chooseN, setChooseN] = useState(2); // State for "choose n"
   const [factor, setFactor] = useState(2);
-  const [resultArray, setresultArray] = useState([]);
 
-
-  const getCombinations = (userNumbers, factor) => {
-    if (!Array.isArray(userNumbers) || userNumbers.length === 0 || !factor) return [];
+  const calculateNChooseN = (n) => {
+    const numbers = userNumbers.map(num => parseInt(num)).filter(num => !isNaN(num));
+    let results = [];
   
-    const numArray = userNumbers.map(Number).filter(n => !isNaN(n) && n !== "");
-    let output = [];
+    const getCombinations = (arr) => {
+      if (arr.length < 2) return;
   
-    for (let start = 0; start <= numArray.length - factor; start++) {
-      let product = 1;
-      // Calculate the initial product of the first 'factor' numbers
-      for (let j = 0; j < factor; j++) {
-        product *= numArray[start + j] || 1; // Ensure we're multiplying numbers
+      for (let i = 0; i < arr.length - 1; i++) {
+        let product = arr[i] * arr[i + 1];
+        results.push(product % 90);
+  
+        for (let j = i + 2; j < arr.length; j++) {
+          product *= arr[j];
+          results.push(product % 90);
+        }
       }
-      output.push(product);
+    };
   
-      // Continue multiplying the next numbers
-      for (let k = start + factor; k < numArray.length; k++) {
-        product *= numArray[k] || 1; // Ensure we're multiplying numbers
-        output.push(product);
-      }
-    }
+    getCombinations(numbers, n);
   
-    return output.map(num => (num > 90 ? num % 90 : num)); // Apply modulus 90
+    return results;
   };
-  
-
-  // const numArray = userNumbers.map(Number).filter(n => !isNaN(n) && n !== "");
-
-  const calculateNChooseN = () => {
-    const numArray = userNumbers.map(Number).filter(n => !isNaN(n) && n !== "");
-    let finalOutput = [];
-  
-    for (let i = 0; i <= numArray.length - factor; i++) {
-      let sequence = getCombinations(numArray.slice(i), factor); // Restart at each position
-      finalOutput.push(...sequence);
-    }
-  
-    setresultArray(finalOutput);
-    return finalOutput;
-  };
-  
-
 
   const handleCalculateCombo = () => {
     if (factor < 2 || factor > 44) {
@@ -61,7 +39,7 @@ const MultiplicationCombinatorics = () => {
       return;
     }
 
-    const results = calculateNChooseN();
+    const results = calculateNChooseN(factor);
     setModResults(results);
 
     setTimeout(() => {
@@ -195,8 +173,8 @@ const MultiplicationCombinatorics = () => {
                     type="number"
                     min="2"
                     max="7"
-                    value={chooseN}
-                    onChange={(e) => setChooseN(parseInt(e.target.value))}
+                    value={factor}
+                    onChange={(e) => setFactor(parseInt(e.target.value))}
                     className="p-1 mb-2 border rounded"
                   />
                   <button onClick={() => handleRandomize()} className="mx-auto bg-gradient-to-tr focus:outline-1 outline-sky-300 from-violet-500 via-orange-400 to-blue-500 text-white rounded px-2 py-1">
